@@ -80,7 +80,6 @@ elif page == "Add Stock":
         measure = st.text_input("Measure")
         sku1 = st.text_input("SKU1")
         sku2 = st.text_input("SKU2")
-        inbound_date = st.date_input("Inbound Date")
         
         submitted = st.form_submit_button("Add Stock")
         
@@ -91,7 +90,11 @@ elif page == "Add Stock":
             # Insert new inbound entry into Supabase
             inbound_response = supabase_client.from_("inbound").insert({
                 "id": id,
-                "date": inbound_date.isoformat()
+            }).execute()
+
+            outbound_response = supabase_client.from_("outbound").insert({
+                "id": id,
+                "date": "2030-01-01 00:00:00+00"
             }).execute()
             
             if inbound_response.data:
