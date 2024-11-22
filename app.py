@@ -54,19 +54,19 @@ if page == "Dashboard":
     stock = stock[['id', 'Client Name', 'Description', 'Quantity', 'Measure', 'Volume', 'Weight', 'SKU1', 'SKU2']]
 
     inbound = fetch_table_data('inbound')
-    outbound = fetch_table_data('outbound')
+    inbound = inbound.merge(stock[['id', 'Client Name', 'Description', 'Quantity', 'Measure', 'SKU1', 'SKU2']], left_on='id', right_on='id', suffixes=('', '_stock'))
+
+    st.subheader("Current Stock")
+    st.dataframe(stock, hide_index=True)
+
+    st.subheader("Inbound dates of current Stock")
+    st.dataframe(inbound, hide_index=True)
     
     st.subheader("Clients")
     st.dataframe(clients, hide_index=True)
+
     
-    st.subheader("Current Stock")
-    st.dataframe(stock, hide_index=True)
-    
-    st.subheader("Inbound")
-    st.dataframe(inbound, hide_index=True)
-    
-    st.subheader("Outbound")
-    st.dataframe(outbound, hide_index=True)
+
 
 # Add Stock Page
 elif page == "Add Stock":
