@@ -118,13 +118,7 @@ elif page == "Add Stock":
 # Record Outbound Page
 elif page == "Record Outbound":
     st.title("Record Outbound")
-    
-    # Fetch stock data
     stock_df = fetch_table_data('stock')
-    
-    # Display stock data
-    st.subheader("Current Stock")
-    st.dataframe(stock_df, hide_index=True)
     
     # Form to delete stock and record outbound
     with st.form("delete_stock_form"):
@@ -137,7 +131,7 @@ elif page == "Record Outbound":
         
         if submitted:
             # Extract the selected stock ID
-            stock_id_to_delete = int(selected_stock.split(":")[0])
+            stock_id_to_delete = int(selected_stock.split(": ")[0])
             
             # Get the current date in YYYY-MM-DD format
             from datetime import datetime
@@ -159,6 +153,10 @@ elif page == "Record Outbound":
                     st.error("Failed to delete stock.")
             else:
                 st.error("Failed to record outbound.")
+
+        # Display stock data
+    st.subheader("Current Stock")
+    st.dataframe(stock_df, hide_index=True)
 
 # Add Client Page
 elif page == "Add Client":
