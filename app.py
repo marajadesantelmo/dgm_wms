@@ -27,7 +27,7 @@ def get_available_client_ids():
 def get_available_clients():
     clients_df = fetch_table_data('clients')
     if not clients_df.empty:
-        return clients_df[['id', 'name']].to_dict('records')
+        return clients_df[['id', 'Name']].to_dict('records')
     return []
 
 # Add logo to the top
@@ -70,7 +70,7 @@ elif page == "Add Stock":
     
     # Fetch available clients
     available_clients = get_available_clients()
-    client_names = [client['name'] for client in available_clients]
+    client_names = [client['Name'] for client in available_clients]
     
     # Form to add new stock
     with st.form("add_stock_form"):
@@ -100,12 +100,12 @@ elif page == "Add Stock":
                 # Insert new stock entry into Supabase
                 stock_response = supabase_client.from_("stock").insert([{
                     "id": id,
-                    "description": description,
-                    "client": client_id,
-                    "quantity": quantity,
-                    "measure": measure,
-                    "sku1": sku1,
-                    "sku2": sku2
+                    "Description": description,
+                    "Client": client_id,
+                    "Quantity": quantity,
+                    "Measure": measure,
+                    "SKU1": sku1,
+                    "SKU2": sku2
                 }]).execute()
                 
                 if stock_response.data:
