@@ -129,7 +129,7 @@ elif page == "Record Outbound":
     # Form to delete stock and record outbound
     with st.form("delete_stock_form"):
         stock_ids = stock_df['id'].tolist()
-        stock_descriptions = stock_df['description'].tolist()
+        stock_descriptions = stock_df['Description'].tolist()
         stock_options = [f"{stock_id}: {desc}" for stock_id, desc in zip(stock_ids, stock_descriptions)]
         
         selected_stock = st.selectbox("Select Stock to Record Outbound", stock_options)
