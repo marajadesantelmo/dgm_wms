@@ -171,12 +171,12 @@ elif page == "Add Client":
         submitted = st.form_submit_button("Add Client")
         
         if submitted:
-            # Insert new client into Supabase
+            id= int(get_next_client_id())
             client_response = supabase_client.from_("clients").insert({
                 "Name": client_name,
                 "Phone": contact,
                 "email": email,
-                "id": get_next_client_id()
+                "id": id
             }).execute()
             
             if client_response.data:
