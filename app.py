@@ -51,7 +51,7 @@ if page == "Dashboard":
     stock = stock.merge(clients[['id', 'Name']], left_on='client', right_on='id', suffixes=('', '_client'))
     stock.drop(columns=['id_client', 'client'], inplace=True)
     stock.rename(columns={'Name': 'Client Name'}, inplace=True)
-    stock = stock[['id', 'Client Name', 'Description', 'Quantity', 'Measure', 'Volume', 'Weight' 'SKU1', 'SKU2']]
+    stock = stock[['id', 'Client Name', 'Description', 'Quantity', 'Measure', 'Volume', 'Weight', 'SKU1', 'SKU2']]
 
     inbound = fetch_table_data('inbound')
     outbound = fetch_table_data('outbound')
