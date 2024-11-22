@@ -35,7 +35,7 @@ def get_available_clients():
 
 # Sidebar Navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Dashboard", "Add Stock", "Delete Stock", "Add Client"])
+page = st.sidebar.radio("Go to", ["Dashboard", "Add Stock", "Record Outbound", "Add Client"])
 
 # Dashboard Page
 if page == "Dashboard":
@@ -115,20 +115,50 @@ elif page == "Add Stock":
             else:
                 st.error("Failed to add inbound entry.")
 
-# Delete Stock Page
-elif page == "Delete Stock":
-    st.title("Delete Stock")
+# Record Outbound Page
+elif page == "Record Outbound":
+    st.title("Record Outbound")
     
-    # Form to delete stock
+    # Fetch stock data
+    stock_df = fetch_table_data('stock')
+    
+    # Display stock data
+    st.subheader("Current Stock")
+    st.dataframe(stock_df, hide_index=True)
+    
+    # Form to delete stock and record outbound
     with st.form("delete_stock_form"):
-        stock_id = st.number_input("Stock ID to delete", min_value=1)
+        stock_ids = stock_df['id'].tolist()
+        stock_descriptions = stock_df['description'].tolist()
+        stock_options = [f"{stock_id}: {desc}" for stock_id, desc in zip(stock_ids, stock_descriptions)]
         
-        submitted = st.form_submit_button("Delete Stock")
+        selected_stock = st.selectbox("Select Stock to Record Outbound", stock_options)
+        submitted = st.form_submit_button("Record Outbound")
         
         if submitted:
-            # Delete stock from Supabase
-            supabase_client.from_("stock").delete().eq("id", stock_id).execute()
-            st.success("Stock deleted successfully!")
+            # Extract the selected stock ID
+            stock_id_to_delete = int(selected_stock.split(":")[0])
+            
+            # Get the current date in YYYY-MM-DD format
+            from datetime import datetime
+            current_date = datetime.now().strftime("%Y-%m-%d")
+            
+            # Insert new outbound entry into Supabase
+            outbound_response = supabase_client.from_("outbound").insert([{
+                "id": stock_id_to_delete,
+                "date": current_date
+            }]).execute()
+            
+            if outbound_response.data:
+                # Delete stock from Supabase
+                delete_response = supabase_client.from_("stock").delete().eq("id", stock_id_to_delete).execute()
+                
+                if delete_response.data:
+                    st.success("Stock recorded as outbound and deleted successfully!")
+                else:
+                    st.error("Failed to delete stock.")
+            else:
+                st.error("Failed to record outbound.")
 
 # Add Client Page
 elif page == "Add Client":
