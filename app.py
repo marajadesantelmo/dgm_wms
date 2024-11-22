@@ -176,6 +176,7 @@ elif page == "Add Client":
                 "Name": client_name,
                 "Phone": contact,
                 "email": email,
+                "id": get_next_client_id()
             }).execute()
             
             if client_response.data:
