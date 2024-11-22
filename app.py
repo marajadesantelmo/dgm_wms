@@ -85,7 +85,8 @@ elif page == "Add Stock":
         if submitted:
             # Get the client ID based on the selected client name
             client_id = next(client['id'] for client in available_clients if client['name'] == client_name)
-            id = get_next_item_id()
+            id = int(get_next_item_id()) 
+            
             # Insert new inbound entry into Supabase
             inbound_response = supabase_client.from_("inbound").insert([{
                 "id": id,
