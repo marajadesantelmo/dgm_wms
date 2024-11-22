@@ -4,34 +4,31 @@ from supabase_connection import fetch_table_data, supabase_client
 
 # Helper function to get the next client ID
 def get_next_client_id():
-    clients_df = fetch_table_data('clients')
-    if clients_df.empty:
+    clients = fetch_table_data('clients')
+    if clients.empty:
         return 1
     else:
-        return clients_df['id'].max() + 1
+        return clients['id'].max() + 1
 
 # Helper function to get the next item ID
 def get_next_item_id():
-    clients_df = fetch_table_data('inbound')
-    if clients_df.empty:
+    clients = fetch_table_data('inbound')
+    if clients.empty:
         return 1
     else:
-        return clients_df['id'].max() + 1
+        return clients['id'].max() + 1
 
 # Helper function to get available client IDs
 def get_available_client_ids():
-    clients_df = fetch_table_data('clients')
-    return clients_df['id'].tolist() if not clients_df.empty else []
+    clients = fetch_table_data('clients')
+    return clients['id'].tolist() if not clients.empty else []
 
 # Helper function to get available clients
 def get_available_clients():
-    clients_df = fetch_table_data('clients')
-    if not clients_df.empty:
-        return clients_df[['id', 'Name']].to_dict('records')
+    clients = fetch_table_data('clients')
+    if not clients.empty:
+        return clients[['id', 'Name']].to_dict('records')
     return []
-
-# Add logo to the top
-
 
 # Sidebar Navigation
 st.sidebar.title("Navigation")
@@ -47,22 +44,29 @@ if page == "Dashboard":
         st.title("Warehouse Management System")
     
     # Fetch and display data from Supabase
-    clients_df = fetch_table_data('clients')
-    stock_df = fetch_table_data('stock')
-    inbound_df = fetch_table_data('inbound')
-    outbound_df = fetch_table_data('outbound')
+    clients = fetch_table_data('clients')
+    stock = fetch_table_data('stock')
+
+    # Current stock table
+    stock = stock.merge(clients[['id', 'Name']], left_on='client', right_on='id', suffixes=('', '_client'))
+    stock.drop(columns=['id_client', 'client'], inplace=True)
+    stock.rename(columns={'Name': 'Client Name'}, inplace=True)
+    stock = stock[['id', 'Client Name', 'Description', 'Quantity', 'Measure', 'Volume', 'Weight' 'SKU1', 'SKU2']]
+
+    inbound = fetch_table_data('inbound')
+    outbound = fetch_table_data('outbound')
     
     st.subheader("Clients")
-    st.dataframe(clients_df, hide_index=True)
+    st.dataframe(clients, hide_index=True)
     
-    st.subheader("Stock")
-    st.dataframe(stock_df, hide_index=True)
+    st.subheader("Current Stock")
+    st.dataframe(stock, hide_index=True)
     
     st.subheader("Inbound")
-    st.dataframe(inbound_df, hide_index=True)
+    st.dataframe(inbound, hide_index=True)
     
     st.subheader("Outbound")
-    st.dataframe(outbound_df, hide_index=True)
+    st.dataframe(outbound, hide_index=True)
 
 # Add Stock Page
 elif page == "Add Stock":
@@ -91,10 +95,6 @@ elif page == "Add Stock":
             inbound_response = supabase_client.from_("inbound").insert([{
                 "id": id,
             }]).execute()
-
-            outbound_response = supabase_client.from_("outbound").insert([{
-                "id": id,
-            }]).execute()
             
             if inbound_response.data:
                 # Insert new stock entry into Supabase
@@ -118,12 +118,12 @@ elif page == "Add Stock":
 # Record Outbound Page
 elif page == "Record Outbound":
     st.title("Record Outbound")
-    stock_df = fetch_table_data('stock')
+    stock = fetch_table_data('stock')
     
     # Form to delete stock and record outbound
     with st.form("delete_stock_form"):
-        stock_ids = stock_df['id'].tolist()
-        stock_descriptions = stock_df['Description'].tolist()
+        stock_ids = stock['id'].tolist()
+        stock_descriptions = stock['Description'].tolist()
         stock_options = [f"{stock_id}: {desc}" for stock_id, desc in zip(stock_ids, stock_descriptions)]
         
         selected_stock = st.selectbox("Select Stock to Record Outbound", stock_options)
@@ -156,7 +156,7 @@ elif page == "Record Outbound":
 
         # Display stock data
     st.subheader("Current Stock")
-    st.dataframe(stock_df, hide_index=True)
+    st.dataframe(stock, hide_index=True)
 
 # Add Client Page
 elif page == "Add Client":
