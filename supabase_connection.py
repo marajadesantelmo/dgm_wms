@@ -2,7 +2,7 @@ from supabase import create_client, Client
 import pandas as pd
 import os
 
-url = os.getenv("url_saupabase")
+url = os.getenv("url_supabase")
 key = os.getenv("key_supabase")
 
 supabase_client = create_client(url, key)
