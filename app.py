@@ -175,7 +175,7 @@ elif page == "Add Client":
             client_response = supabase_client.from_("clients").insert({
                 "Name": client_name,
                 "Phone": contact,
-                "Email": email,
+                "email": email,
             }).execute()
             
             if client_response.data:
