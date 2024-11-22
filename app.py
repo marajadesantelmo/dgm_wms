@@ -42,7 +42,7 @@ if page == "Dashboard":
 
     col1, col2 = st.columns([1, 7])
     with col1:
-        st.image("logo.png", use_column_width=True)
+        st.image("logo.png", use_container_width=True)
     with col2:
         st.title("Warehouse Management System")
     
@@ -101,7 +101,7 @@ elif page == "Add Stock":
                 stock_response = supabase_client.from_("stock").insert([{
                     "id": id,
                     "Description": description,
-                    "Client": client_id,
+                    "client": client_id,
                     "Quantity": quantity,
                     "Measure": measure,
                     "SKU1": sku1,
