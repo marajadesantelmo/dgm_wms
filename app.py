@@ -84,7 +84,7 @@ elif page == "Add Stock":
         
         if submitted:
             # Get the client ID based on the selected client name
-            client_id = next(client['id'] for client in available_clients if client['name'] == client_name)
+            client_id = next(client['id'] for client in available_clients if client['Name'] == client_name)
             id = int(get_next_item_id()) 
             
             # Insert new inbound entry into Supabase
@@ -144,9 +144,9 @@ elif page == "Add Client":
         if submitted:
             # Insert new client into Supabase
             client_response = supabase_client.from_("clients").insert({
-                "name": client_name,
-                "contact": contact,
-                "added": pd.Timestamp.now().isoformat()
+                "Name": client_name,
+                "Contact": contact,
+                "Added": pd.Timestamp.now().isoformat()
             }).execute()
             
             if client_response.data:
