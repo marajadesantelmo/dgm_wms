@@ -140,7 +140,7 @@ elif page == "Record Outbound":
             # Insert new outbound entry into Supabase
             outbound_response = supabase_client.from_("outbound").insert([{
                 "id": stock_id_to_delete,
-                "date": current_date
+                "Date": current_date
             }]).execute()
             
             if outbound_response.data:
