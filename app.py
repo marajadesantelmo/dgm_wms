@@ -94,7 +94,6 @@ elif page == "Add Stock":
 
             outbound_response = supabase_client.from_("outbound").insert([{
                 "id": id,
-                "date": "2030-01-01 00:00:00+00"
             }]).execute()
             
             if inbound_response.data:
