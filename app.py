@@ -82,6 +82,8 @@ elif page == "Add Stock":
         client_name = st.selectbox("Client Name", client_names)
         quantity = st.number_input("Quantity", min_value=1)
         measure = st.text_input("Measure")
+        volume = st.number_input("Volume", min_value=0.0)
+        weight = st.number_input("Weight", min_value=0.0)
         sku1 = st.text_input("SKU1")
         sku2 = st.text_input("SKU2")
         submitted = st.form_submit_button("Add Stock")
@@ -104,6 +106,8 @@ elif page == "Add Stock":
                     "client": client_id,
                     "Quantity": quantity,
                     "Measure": measure,
+                    "Volume": volume,
+                    "Weight": weight,
                     "SKU1": sku1,
                     "SKU2": sku2
                 }]).execute()
