@@ -80,7 +80,6 @@ elif page == "Add Stock":
         measure = st.text_input("Measure")
         sku1 = st.text_input("SKU1")
         sku2 = st.text_input("SKU2")
-        
         submitted = st.form_submit_button("Add Stock")
         
         if submitted:
@@ -88,18 +87,18 @@ elif page == "Add Stock":
             client_id = next(client['id'] for client in available_clients if client['name'] == client_name)
             id = get_next_item_id()
             # Insert new inbound entry into Supabase
-            inbound_response = supabase_client.from_("inbound").insert({
+            inbound_response = supabase_client.from_("inbound").insert([{
                 "id": id,
-            }).execute()
+            }]).execute()
 
-            outbound_response = supabase_client.from_("outbound").insert({
+            outbound_response = supabase_client.from_("outbound").insert([{
                 "id": id,
                 "date": "2030-01-01 00:00:00+00"
-            }).execute()
+            }]).execute()
             
             if inbound_response.data:
                 # Insert new stock entry into Supabase
-                stock_response = supabase_client.from_("stock").insert({
+                stock_response = supabase_client.from_("stock").insert([{
                     "id": id,
                     "inbound": id,
                     "description": description,
@@ -108,7 +107,7 @@ elif page == "Add Stock":
                     "measure": measure,
                     "sku1": sku1,
                     "sku2": sku2
-                }).execute()
+                }]).execute()
                 
                 if stock_response.data:
                     st.success("Stock added successfully!")
