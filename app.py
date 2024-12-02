@@ -46,20 +46,23 @@ if page == "Dashboard":
     # Fetch and display data from Supabase
     clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
+    skus = fetch_table_data('skus')
 
     # Current stock table
-    stock = stock.merge(clients[['client_id', 'Name']], left_on='client_id', right_on='id', suffixes=('', '_client'))
-    stock.drop(columns=['id_client', 'client'], inplace=True)
+    stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
+    stock = stock.merge(skus, on = 'sku_id')
+    stock.drop(columns=['sku_id', 'client_id'], inplace=True)
     stock.rename(columns={'Name': 'Client Name'}, inplace=True)
-    stock = stock[['id', 'Client Name', 'Description', 'Quantity', 'Measure', 'Volume', 'Weight', 'SKU1', 'SKU2']]
+    stock = stock[['Client Name', 'SKU', 'quantity']]
 
     inbound = fetch_table_data('inbound')
-    inbound = inbound.merge(stock[['id', 'Client Name', 'Description', 'Quantity', 'Measure', 'SKU1', 'SKU2']], left_on='id', right_on='id', suffixes=('', '_stock'))
+    inbound = inbound.merge(skus, on = 'sku_id')
+    inbound = inbound[['Date', 'SKU', 'quantity']]
 
     st.subheader("Current Stock")
     st.dataframe(stock, hide_index=True)
 
-    st.subheader("Inbound dates of current Stock")
+    st.subheader("Inbound to Stock")
     st.dataframe(inbound, hide_index=True)
     
     st.subheader("Clients")
