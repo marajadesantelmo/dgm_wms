@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
+from datetime import datetime
+            
 
 # Helper function to get the next client ID
 def get_next_client_id():
@@ -35,7 +37,7 @@ def current_stock_table(stock, clients, skus):
     current_stock = stock[['Client Name', 'SKU', 'quantity']]
     return current_stock
 
-
+current_date = datetime.now().strftime("%Y-%m-%d")
 # Sidebar Navigation
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Dashboard", "Add Stock", "Record Outbound", "Add Client"])
@@ -108,6 +110,14 @@ elif page == "Add Stock":
                 
                 if update_response.data:
                     st.success(f"Stock updated successfully! New quantity: {new_quantity}")
+
+                    # Insert new inbound entry into Supabase
+                    inbound_response = supabase_client.from_("inbound").insert([{
+                        "sku_id": sku_id,
+                        "client_id": client_id,
+                        "Date": current_date,
+                        "quantity": quantity
+                    }]).execute()
                 else:
                     st.error("Failed to update stock.")
             else:
@@ -120,67 +130,82 @@ elif page == "Add Stock":
                 
                 if insert_response.data:
                     st.success("New stock added successfully!")
+
+                    # Insert new inbound entry into Supabase
+                    inbound_response = supabase_client.from_("inbound").insert([{
+                        "sku_id": sku_id,
+                        "client_id": client_id,
+                        "Date": current_date,
+                        "quantity": quantity
+                    }]).execute()
                 else:
                     st.error("Failed to add new stock.")
 
 # Record Outbound Page
 elif page == "Record Outbound":
     st.title("Record Outbound")
+    
+    # Fetch and prepare data
     clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
     skus = fetch_table_data('skus')
     stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
-    stock = stock.merge(skus, on = 'sku_id')
+    stock = stock.merge(skus, on='sku_id')
+
     # Form to delete stock and record outbound
     with st.form("delete_stock_form"):
-
-        stock_ids = stock['sku_id'].tolist()
-        stock_skus = stock['SKU'].tolist()
-        stock_options = [f"{stock_id}: {desc}" for stock_id, desc in zip(stock_ids, stock_skus)]
-
-        clients_options = [f"{client_id}: {name}" for client_id, name in zip(clients['client_id'], clients['Name'])]
-        
+        # Create options for selection
+        stock_options = [
+            f"{row['sku_id']}: {row['SKU']} (Client: {row['Name']}, Quantity: {row['quantity']})" 
+            for _, row in stock.iterrows()
+        ]
         selected_stock = st.selectbox("Select Stock to Record Outbound", stock_options)
-        selected_client = st.selectbox("Select Client", clients_options)
-        quantity = st.number_input("Quantity", min_value=1)
+        quantity = st.number_input("Quantity to Subtract", min_value=1)
         submitted = st.form_submit_button("Record Outbound")
         
         if submitted:
-            # Extract the selected stock ID
-            stock_id_to_delete = int(selected_stock.split(": ")[0])
-            client_id = int(selected_client.split(": ")[0])
-            current_quantity = stock.loc[(stock['id'] == stock_id_to_delete) & (stock['client_id'] == client_id), 'quantity'].values[0]
-            new_quantity = current_quantity - quantity
+            # Extract stock and client details
+            sku_id = int(selected_stock.split(": ")[0])
+            client_id = stock.loc[stock['sku_id'] == sku_id, 'client_id'].values[0]
+            current_quantity = stock.loc[
+                (stock['sku_id'] == sku_id) & (stock['client_id'] == client_id),
+                'quantity'
+            ].values[0]
             
-            if new_quantity < 0:
+            # Check for sufficient stock
+            if quantity > current_quantity:
                 st.error("The quantity to subtract exceeds the current stock quantity.")
-
-            from datetime import datetime
-            current_date = datetime.now().strftime("%Y-%m-%d")
-            
-            # Insert new outbound entry into Supabase
-            outbound_response = supabase_client.from_("outbound").insert([{
-                "id": stock_id_to_delete,
-                "Date": current_date,
-                "Quantity": quantity
-            }]).execute()
-            
-            if outbound_response.data:
-                # Delete stock from Supabase
-                update_response = supabase_client.from_("stock").update({
-                        "quantity": new_quantity
-                    }).eq("id", stock_id_to_delete).execute()
-                if update_response.data:
-                    st.success("Stock recorded as outbound and deleted successfully!")
-                else:
-                    st.error("Failed to delete stock.")
             else:
-                st.error("Failed to record outbound.")
+                # Calculate the new stock quantity
+                new_quantity = current_quantity - quantity
+                current_date = datetime.now().strftime("%Y-%m-%d")
+                
+                # Update stock in Supabase
+                update_response = supabase_client.from_("stock").update({
+                    "quantity": new_quantity
+                }).match({
+                    "sku_id": sku_id,
+                    "client_id": client_id
+                }).execute()
+                
+                if update_response.data:
+                    st.success(
+                        f"Outbound record created successfully! Remaining stock: {new_quantity}"
+                    )
 
-        # Display stock data
+                    outbound_response = supabase_client.from_("outbound").insert([{
+                        "sku_id": sku_id,
+                        "client_id": client_id,
+                        "Date": current_date,
+                        "quantity": quantity
+                    }]).execute()
+
+                else:
+                    st.error("Failed to update stock.")
+    
+    # Display current stock
     st.subheader("Current Stock")
-    st.dataframe(stock, hide_index=True)
-
+    st.dataframe(stock[['sku_id', 'SKU', 'Name', 'quantity']], hide_index=True)
 # Add Client Page
 elif page == "Add Client":
     st.title("Add Client")
