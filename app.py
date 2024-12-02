@@ -8,7 +8,7 @@ def get_next_client_id():
     if clients.empty:
         return 1
     else:
-        return clients['id'].max() + 1
+        return clients['client_id'].max() + 1
 
 # Helper function to get the next item ID
 def get_next_item_id():
@@ -16,18 +16,18 @@ def get_next_item_id():
     if clients.empty:
         return 1
     else:
-        return clients['id'].max() + 1
+        return clients['client_id'].max() + 1
 
 # Helper function to get available client IDs
 def get_available_client_ids():
     clients = fetch_table_data('clients')
-    return clients['id'].tolist() if not clients.empty else []
+    return clients['client_id'].tolist() if not clients.empty else []
 
 # Helper function to get available clients
 def get_available_clients():
     clients = fetch_table_data('clients')
     if not clients.empty:
-        return clients[['id', 'Name']].to_dict('records')
+        return clients[['client_id', 'Name']].to_dict('records')
     return []
 
 # Sidebar Navigation
@@ -48,7 +48,7 @@ if page == "Dashboard":
     stock = fetch_table_data('stock')
 
     # Current stock table
-    stock = stock.merge(clients[['id', 'Name']], left_on='client', right_on='id', suffixes=('', '_client'))
+    stock = stock.merge(clients[['client_id', 'Name']], left_on='client_id', right_on='id', suffixes=('', '_client'))
     stock.drop(columns=['id_client', 'client'], inplace=True)
     stock.rename(columns={'Name': 'Client Name'}, inplace=True)
     stock = stock[['id', 'Client Name', 'Description', 'Quantity', 'Measure', 'Volume', 'Weight', 'SKU1', 'SKU2']]
@@ -90,7 +90,7 @@ elif page == "Add Stock":
         
         if submitted:
             # Get the client ID based on the selected client name
-            client_id = next(client['id'] for client in available_clients if client['Name'] == client_name)
+            client_id = next(client['client_id'] for client in available_clients if client['Name'] == client_name)
             id = int(get_next_item_id()) 
             
             # Insert new inbound entry into Supabase
