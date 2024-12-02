@@ -44,11 +44,9 @@ if page == "Dashboard":
         st.title("Warehouse Management System")
     
     # Fetch and display data from Supabase
-    clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
 
     # Current stock table
-    stock = stock.merge(clients[['id', 'Name']], left_on='client', right_on='id', suffixes=('', '_client'))
     stock.drop(columns=['id_client', 'client'], inplace=True)
     stock.rename(columns={'Name': 'Client Name'}, inplace=True)
     stock = stock[['id', 'Client Name', 'Description', 'Quantity', 'Measure', 'Volume', 'Weight', 'SKU1', 'SKU2']]
@@ -61,12 +59,6 @@ if page == "Dashboard":
 
     st.subheader("Inbound dates of current Stock")
     st.dataframe(inbound, hide_index=True)
-    
-    st.subheader("Clients")
-    st.dataframe(clients, hide_index=True)
-
-    
-
 
 # Add Stock Page
 elif page == "Add Stock":
