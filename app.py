@@ -197,7 +197,7 @@ elif page == "Record Outbound":
                         "sku_id": sku_id,
                         "client_id": client_id,
                         "Date": current_date,
-                        "quantity": int(quantity)
+                        "Quantity": int(quantity)
                     }]).execute()
 
                 else:
