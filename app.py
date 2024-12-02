@@ -98,14 +98,14 @@ elif page == "Add Stock":
             inbound_response = supabase_client.from_("inbound").insert([{
                 "id": id,
                 "Date": current_date,
-                "sku_id": sku,
+                "sku_id": sku_id,
                 "quantity": quantity
             }]).execute()
             
             if inbound_response.data:
                 # Insert new stock entry into Supabase
                 stock_response = supabase_client.from_("stock").insert([{
-                    "sku_id": sku,
+                    "sku_id": sku_id,
                     "client_id": client_id,
                     "quantity": quantity,
                 }]).execute()
