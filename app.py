@@ -191,42 +191,50 @@ elif page == "Record Outbound":
             # Extract stock and client details
             sku_id = int(selected_stock.split(": ")[0])
             client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
-            current_quantity = stock.loc[
-                (stock['sku_id'] == sku_id) & (stock['client_id'] == client_id),
-                'quantity'
-            ].values[0]
-            
-            # Check for sufficient stock
-            if quantity > current_quantity:
-                st.error("The quantity to subtract exceeds the current stock quantity.")
-            else:
-                # Calculate the new stock quantity
-                new_quantity = current_quantity - quantity
-                current_date = datetime.now().strftime("%Y-%m-%d")
-                
-                # Update stock in Supabase
-                update_response = supabase_client.from_("stock").update({
-                    "quantity": int(new_quantity)
-                }).match({
-                    "sku_id": sku_id,
-                    "client_id": client_id
-                }).execute()
-                
-                if update_response.data:
-                    st.success(
-                        f"Outbound record created successfully! Remaining stock: {new_quantity}"
-                    )
-                    outbound_id = get_next_outbound_id()
-                    outbound_response = supabase_client.from_("outbound").insert([{
-                        'id': int(outbound_id),
-                        "sku_id": sku_id,
-                        "client_id": client_id,
-                        "Date": current_date,
-                        "Quantity": int(quantity)
-                    }]).execute()
 
+            # Check if stock already exists for the given sku_id and client_id
+            existing_stock = stock.loc[(stock['sku_id'] == sku_id) & (stock['client_id'] == client_id)]
+
+            if existing_stock.empty:
+                st.error("No stock available for the selected SKU and Client.")
+            
+            else:
+                current_quantity = stock.loc[
+                    (stock['sku_id'] == sku_id) & (stock['client_id'] == client_id),
+                    'quantity'
+                ].values[0]
+
+                # Check for sufficient stock
+                if quantity > current_quantity:
+                    st.error("The quantity to subtract exceeds the current stock quantity.")
                 else:
-                    st.error("Failed to update stock.")
+                    # Calculate the new stock quantity
+                    new_quantity = current_quantity - quantity
+                    current_date = datetime.now().strftime("%Y-%m-%d")
+                    
+                    # Update stock in Supabase
+                    update_response = supabase_client.from_("stock").update({
+                        "quantity": int(new_quantity)
+                    }).match({
+                        "sku_id": sku_id,
+                        "client_id": client_id
+                    }).execute()
+                    
+                    if update_response.data:
+                        st.success(
+                            f"Outbound record created successfully! Remaining stock: {new_quantity}"
+                        )
+                        outbound_id = get_next_outbound_id()
+                        outbound_response = supabase_client.from_("outbound").insert([{
+                            'id': int(outbound_id),
+                            "sku_id": sku_id,
+                            "client_id": client_id,
+                            "Date": current_date,
+                            "Quantity": int(quantity)
+                        }]).execute()
+
+                    else:
+                        st.error("Failed to update stock.")
     
     # Display current stock
     st.subheader("Current Stock")
