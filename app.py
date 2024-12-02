@@ -156,9 +156,9 @@ elif page == "Record Outbound":
     with st.form("delete_stock_form"):
         # Create options for selection
         stock_options = [
-            f"{row['sku_id']}: {row['SKU']} (Client: {row['Name']}, Quantity: {row['quantity']})" 
-            for _, row in stock.iterrows()
+            f"{row['sku_id']}: {row['SKU']}" for _, row in stock.iterrows()
         ]
+        client_name = st.selectbox("Client Name", clients['Name'])
         selected_stock = st.selectbox("Select Stock to Record Outbound", stock_options)
         quantity = st.number_input("Quantity to Subtract", min_value=1)
         submitted = st.form_submit_button("Record Outbound")
@@ -166,7 +166,7 @@ elif page == "Record Outbound":
         if submitted:
             # Extract stock and client details
             sku_id = int(selected_stock.split(": ")[0])
-            client_id = stock.loc[stock['sku_id'] == sku_id, 'client_id'].values[0]
+            client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
             current_quantity = stock.loc[
                 (stock['sku_id'] == sku_id) & (stock['client_id'] == client_id),
                 'quantity'
@@ -182,7 +182,7 @@ elif page == "Record Outbound":
                 
                 # Update stock in Supabase
                 update_response = supabase_client.from_("stock").update({
-                    "quantity": new_quantity
+                    "quantity": int(new_quantity)
                 }).match({
                     "sku_id": sku_id,
                     "client_id": client_id
@@ -197,7 +197,7 @@ elif page == "Record Outbound":
                         "sku_id": sku_id,
                         "client_id": client_id,
                         "Date": current_date,
-                        "quantity": quantity
+                        "quantity": int(quantity)
                     }]).execute()
 
                 else:
