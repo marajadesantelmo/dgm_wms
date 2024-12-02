@@ -173,7 +173,7 @@ elif page == "Add Client":
                 "Name": client_name,
                 "Phone": contact,
                 "email": email,
-                "id": id
+                "client_id": id
             }).execute()
             
             if client_response.data:
