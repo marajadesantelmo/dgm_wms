@@ -66,6 +66,8 @@ if page == "Dashboard":
     skus = fetch_table_data('skus')
     current_stock = current_stock_table(stock, clients, skus)
 
+    clients = clients[['client_id', 'Name', 'Phone', 'email']]
+
     inbound = fetch_table_data('inbound')
     inbound = inbound.merge(skus, on = 'sku_id')
     inbound = inbound.merge(clients[['client_id', 'Name']], on='client_id')
@@ -79,8 +81,15 @@ if page == "Dashboard":
     st.subheader("Current Stock")
     st.dataframe(current_stock, hide_index=True)
 
-    st.subheader("Inbound to Stock")
-    st.dataframe(inbound, hide_index=True)
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("Inbound to Stock")
+        st.dataframe(inbound, hide_index=True)
+
+    with col2:
+        st.subheader("Outbound from Stock")
+        st.dataframe(outbound, hide_index=True)
     
     st.subheader("Clients")
     st.dataframe(clients, hide_index=True)
