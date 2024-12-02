@@ -89,6 +89,7 @@ elif page == "Add Stock":
         if submitted:
             # Get ids
             client_id = clients.loc[clients['Name'] == client_name, 'client_id'].values[0]
+            sku_id = skus.loc[skus['SKU'] == sku, 'sku_id'].values[0]
             id = int(get_next_inbound_id())
             
             # Insert new inbound entry into Supabase
