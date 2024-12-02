@@ -30,6 +30,15 @@ def get_available_clients():
         return clients[['client_id', 'Name']].to_dict('records')
     return []
 
+def current_stock_table(stock, clients, skus):
+    stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
+    stock = stock.merge(skus, on = 'sku_id')
+    stock.drop(columns=['sku_id', 'client_id'], inplace=True)
+    stock.rename(columns={'Name': 'Client Name'}, inplace=True)
+    current_stock = stock[['Client Name', 'SKU', 'quantity']]
+    return current_stock
+
+
 # Sidebar Navigation
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Dashboard", "Add Stock", "Record Outbound", "Add Client"])
@@ -47,20 +56,14 @@ if page == "Dashboard":
     clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
     skus = fetch_table_data('skus')
-
-    # Current stock table
-    stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
-    stock = stock.merge(skus, on = 'sku_id')
-    stock.drop(columns=['sku_id', 'client_id'], inplace=True)
-    stock.rename(columns={'Name': 'Client Name'}, inplace=True)
-    stock = stock[['Client Name', 'SKU', 'quantity']]
+    current_stock = current_stock_table(stock, clients, skus)
 
     inbound = fetch_table_data('inbound')
     inbound = inbound.merge(skus, on = 'sku_id')
     inbound = inbound[['Date', 'SKU', 'quantity']]
 
     st.subheader("Current Stock")
-    st.dataframe(stock, hide_index=True)
+    st.dataframe(current_stock, hide_index=True)
 
     st.subheader("Inbound to Stock")
     st.dataframe(inbound, hide_index=True)
@@ -115,36 +118,51 @@ elif page == "Add Stock":
 # Record Outbound Page
 elif page == "Record Outbound":
     st.title("Record Outbound")
+    clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
-    
+    skus = fetch_table_data('skus')
+    stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
+    stock = stock.merge(skus, on = 'sku_id')
     # Form to delete stock and record outbound
     with st.form("delete_stock_form"):
-        stock_ids = stock['id'].tolist()
-        stock_descriptions = stock['Description'].tolist()
-        stock_options = [f"{stock_id}: {desc}" for stock_id, desc in zip(stock_ids, stock_descriptions)]
+
+        stock_ids = stock['sku_id'].tolist()
+        stock_skus = stock['SKU'].tolist()
+        stock_options = [f"{stock_id}: {desc}" for stock_id, desc in zip(stock_ids, stock_skus)]
+
+        clients_options = [f"{client_id}: {name}" for client_id, name in zip(clients['client_id'], clients['Name'])]
         
         selected_stock = st.selectbox("Select Stock to Record Outbound", stock_options)
+        selected_client = st.selectbox("Select Client", clients_options)
+        quantity = st.number_input("Quantity", min_value=1)
         submitted = st.form_submit_button("Record Outbound")
         
         if submitted:
             # Extract the selected stock ID
             stock_id_to_delete = int(selected_stock.split(": ")[0])
+            client_id = int(selected_client.split(": ")[0])
+            current_quantity = stock.loc[(stock['id'] == stock_id_to_delete) & (stock['client_id'] == client_id), 'quantity'].values[0]
+            new_quantity = current_quantity - quantity
             
-            # Get the current date in YYYY-MM-DD format
+            if new_quantity < 0:
+                st.error("The quantity to subtract exceeds the current stock quantity.")
+
             from datetime import datetime
             current_date = datetime.now().strftime("%Y-%m-%d")
             
             # Insert new outbound entry into Supabase
             outbound_response = supabase_client.from_("outbound").insert([{
                 "id": stock_id_to_delete,
-                "Date": current_date
+                "Date": current_date,
+                "Quantity": quantity
             }]).execute()
             
             if outbound_response.data:
                 # Delete stock from Supabase
-                delete_response = supabase_client.from_("stock").delete().eq("id", stock_id_to_delete).execute()
-                
-                if delete_response.data:
+                update_response = supabase_client.from_("stock").update({
+                        "quantity": new_quantity
+                    }).eq("id", stock_id_to_delete).execute()
+                if update_response.data:
                     st.success("Stock recorded as outbound and deleted successfully!")
                 else:
                     st.error("Failed to delete stock.")
