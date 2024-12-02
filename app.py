@@ -17,6 +17,10 @@ def get_next_inbound_id():
     inbound = fetch_table_data('inbound')
     return inbound['id'].max() + 1
 
+def get_next_outbound_id():
+    inbound = fetch_table_data('outbound')
+    return inbound['id'].max() + 1
+
 # Helper function to get available client IDs
 def get_available_client_ids():
     clients = fetch_table_data('clients')
@@ -45,11 +49,7 @@ page = st.sidebar.radio("Go to", ["Dashboard", "Add Stock", "Record Outbound", "
 # Dashboard Page
 if page == "Dashboard":
 
-    col1, col2 = st.columns([1, 7])
-    with col1:
-        st.image("logo.png", use_container_width=True)
-    with col2:
-        st.title("Warehouse Management System")
+    st.title("DGM - Warehouse Management System")
     
     # Fetch and display data from Supabase
     clients = fetch_table_data('clients')
@@ -59,7 +59,13 @@ if page == "Dashboard":
 
     inbound = fetch_table_data('inbound')
     inbound = inbound.merge(skus, on = 'sku_id')
-    inbound = inbound[['Date', 'SKU', 'quantity']]
+    inbound = inbound.merge(clients[['client_id', 'Name']], on='client_id')
+    inbound = inbound[['Date', 'Name', 'SKU', 'quantity']]
+
+    outbound = fetch_table_data('outbound')
+    outbound = outbound.merge(skus, on = 'sku_id')
+    outbound = outbound.merge(clients[['client_id', 'Name']], on='client_id')
+    outbound = outbound[['Date', 'Name', 'SKU', 'Quantity']]
 
     st.subheader("Current Stock")
     st.dataframe(current_stock, hide_index=True)
