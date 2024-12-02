@@ -11,12 +11,9 @@ def get_next_client_id():
         return clients['client_id'].max() + 1
 
 # Helper function to get the next item ID
-def get_next_item_id():
-    clients = fetch_table_data('inbound')
-    if clients.empty:
-        return 1
-    else:
-        return clients['client_id'].max() + 1
+def get_next_inbound_id():
+    inbound = fetch_table_data('inbound')
+    return inbound['id'].max() + 1
 
 # Helper function to get available client IDs
 def get_available_client_ids():
@@ -79,33 +76,37 @@ elif page == "Add Stock":
     st.title("Add Stock")
     
     # Fetch available clients
-    available_clients = get_available_clients()
-    client_names = [client['Name'] for client in available_clients]
+    clients = fetch_table_data('clients')
+    skus = fetch_table_data('skus')
     
     # Form to add new stock
     with st.form("add_stock_form"):
-        description = st.text_input("Description")
-        client_name = st.selectbox("Client Name", client_names)
+        sku = st.selectbox("SKU", skus['SKU'])
+        client_name = st.selectbox("Client Name", clients['Name'] )
         quantity = st.number_input("Quantity", min_value=1)
         submitted = st.form_submit_button("Add Stock")
         
         if submitted:
-            # Get the client ID based on the selected client name
-            client_id = next(client['client_id'] for client in available_clients if client['Name'] == client_name)
-            id = int(get_next_item_id()) 
+            # Get ids
+            client_id = clients.loc[clients['Name'] == client_name, 'client_id'].values[0]
+            id = int(get_next_inbound_id())
             
             # Insert new inbound entry into Supabase
+            from datetime import datetime
+            current_date = datetime.now().strftime("%Y-%m-%d")
             inbound_response = supabase_client.from_("inbound").insert([{
                 "id": id,
+                "Date": current_date,
+                "sku_id": sku,
+                "quantity": quantity
             }]).execute()
             
             if inbound_response.data:
                 # Insert new stock entry into Supabase
                 stock_response = supabase_client.from_("stock").insert([{
-                    "id": id,
-                    "Description": description,
-                    "client": client_id,
-                    "Quantity": quantity,
+                    "sku_id": sku,
+                    "client_id": client_id,
+                    "quantity": quantity,
                 }]).execute()
                 
                 if stock_response.data:
