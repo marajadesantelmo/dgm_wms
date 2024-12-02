@@ -3,6 +3,15 @@ import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
             
+# Page configuration
+st.set_page_config(page_title="DGM - Warehouse Management System", 
+                   page_icon="📊", 
+                   layout="wide")
+
+# Estilo
+with open("styles.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
 
 # Helper function to get the next client ID
 def get_next_client_id():
@@ -198,8 +207,9 @@ elif page == "Record Outbound":
                     st.success(
                         f"Outbound record created successfully! Remaining stock: {new_quantity}"
                     )
-
+                    outbound_id = get_next_outbound_id()
                     outbound_response = supabase_client.from_("outbound").insert([{
+                        'id': int(outbound_id),
                         "sku_id": sku_id,
                         "client_id": client_id,
                         "Date": current_date,
