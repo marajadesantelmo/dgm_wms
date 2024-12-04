@@ -59,6 +59,11 @@ page = st.sidebar.radio("Go to", ["Dashboard", "Add Stock", "Record Outbound", "
 if page == "Dashboard":
 
     st.title("DGM - Warehouse Management System")
+    col1, col2 = st.columns([7, 1])
+    with col1:
+        st.title("DGM - Warehouse Management System")
+    with col2:
+        st.image("logo.png", use_column_width=True)
     
     # Fetch and display data from Supabase
     clients = fetch_table_data('clients')
