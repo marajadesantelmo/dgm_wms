@@ -58,7 +58,6 @@ page = st.sidebar.radio("Go to", ["Dashboard", "Add Stock", "Record Outbound", "
 # Dashboard Page
 if page == "Dashboard":
 
-    st.title("DGM - Warehouse Management System")
     col1, col2 = st.columns([7, 1])
     with col1:
         st.title("DGM - Warehouse Management System")
