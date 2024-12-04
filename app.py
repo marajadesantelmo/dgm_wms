@@ -47,7 +47,7 @@ def current_stock_table(stock, clients, skus):
     stock = stock.merge(skus, on = 'sku_id')
     stock.drop(columns=['sku_id', 'client_id'], inplace=True)
     stock.rename(columns={'Name': 'Client Name'}, inplace=True)
-    current_stock = stock[['Client Name', 'SKU', 'quantity']]
+    current_stock = stock[['Client Name', 'SKU', 'Quantity']]
     return current_stock
 
 current_date = datetime.now().strftime("%Y-%m-%d")
@@ -75,7 +75,7 @@ if page == "Dashboard":
     inbound = fetch_table_data('inbound')
     inbound = inbound.merge(skus, on = 'sku_id')
     inbound = inbound.merge(clients[['client_id', 'Name']], on='client_id')
-    inbound = inbound[['Date', 'Name', 'SKU', 'quantity']]
+    inbound = inbound[['Date', 'Name', 'SKU', 'Quantity']]
 
     outbound = fetch_table_data('outbound')
     outbound = outbound.merge(skus, on = 'sku_id')
