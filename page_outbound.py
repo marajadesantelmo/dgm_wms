@@ -10,7 +10,7 @@ def show_page_outbound():
     st.title("Record Outbound")
 
     # Fetch and prepare data
-    clients = fetch_table_data('clients')
+    #clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
     skus = fetch_table_data('skus')
     #stock = stock.merge(clients[['client_id', 'Name']], on='client_id')

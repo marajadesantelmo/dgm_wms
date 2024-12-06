@@ -10,14 +10,13 @@ def show_page_dashboard():
     col1, col2 = st.columns([7, 1])
     with col1:
         st.title("DGM - Warehouse Management System")
-        st.markdown(
+    with col2:
+        st.image("logo.png", use_container_width=True)
+    st.markdown(
         """
         <hr style="border: 1px solid darkgreen; margin-top: 20px; margin-bottom: 20px;">
         """,
         unsafe_allow_html=True)
-    with col2:
-        st.image("logo.png", use_container_width=True)
-    
     # Fetch and display data from Supabase
     clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
