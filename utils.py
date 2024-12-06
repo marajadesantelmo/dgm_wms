@@ -1,3 +1,5 @@
+from supabase_connection import fetch_table_data, supabase_client
+
 # Helper function to get the next client ID
 def get_next_client_id():
     clients = fetch_table_data('clients')
@@ -12,8 +14,8 @@ def get_next_inbound_id():
     return inbound['id'].max() + 1
 
 def get_next_outbound_id():
-    inbound = fetch_table_data('outbound')
-    return inbound['id'].max() + 1
+    outbound = fetch_table_data('outbound')
+    return outbound['id'].max() + 1
 
 # Helper function to get available client IDs
 def get_available_client_ids():
