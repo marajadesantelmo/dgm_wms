@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from supabase_connection import fetch_table_data, supabase_client
+from supabase_connection import supabase_client, fetch_table_data
 from utils import current_stock_table, inbound_table
 from datetime import datetime
 
