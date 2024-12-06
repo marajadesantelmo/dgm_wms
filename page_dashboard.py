@@ -11,7 +11,7 @@ def show_page_dashboard():
     with col1:
         st.title("DGM - Warehouse Management System")
     with col2:
-        st.image("logo.png", use_column_width=True)
+        st.image("logo.png", use_container_width=True)
     
     # Fetch and display data from Supabase
     clients = fetch_table_data('clients')
