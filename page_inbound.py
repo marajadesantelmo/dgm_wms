@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
-from utils import current_stock_table
-from datetime import datetime, inbound_table
+from utils import current_stock_table, inbound_table
+from datetime import datetime
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
