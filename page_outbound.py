@@ -14,7 +14,6 @@ def show_page_outbound():
     stock = fetch_table_data('stock')
     skus = fetch_table_data('skus')
     #stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
-    stock = stock.merge(skus, on='sku_id')
     outbount = fetch_table_data('outbound')
     outbound_table = generate_outbound_table(outbount, skus)
     current_stock = current_stock_table(stock, skus)
