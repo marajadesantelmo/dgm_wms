@@ -23,7 +23,7 @@ def show_page_add_sku():
                 id = get_next_sku_id()
                 # Add SKU to the database
                 insert = supabase_client.from_('skus').insert([
-                    {'sku_id': id,
+                    {'sku_id': int(id),
                      'SKU': sku, 
                      'Length': length, 
                      'Schedule': schedule, 
