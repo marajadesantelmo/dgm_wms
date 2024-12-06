@@ -21,17 +21,13 @@ def show_page_add_sku():
                 sku = f"sch{schedule} - {size} - {length}ft"
                 id = get_next_sku_id()
                 # Add SKU to the database
-                insert = supabase_client.from_('skus').insert([
+                supabase_client.from_('skus').insert([
                     {'sku_id': int(id),
                      'SKU': sku, 
                      'Length': length, 
                      'Schedule': schedule, 
                      'Size': size}
                 ]).execute()
-                if insert['error']:
-                    st.error(f"Error: {insert['error']['message']}")
-                else:
-                    st.success(f"SKU {sku} added successfully.")
             else:
                 st.error("Please fill in all fields.")
 
