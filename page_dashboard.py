@@ -6,47 +6,43 @@ from datetime import datetime
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
-def show_page_inbound():
+def show_page_dashboard():
+    col1, col2 = st.columns([7, 1])
+    with col1:
+        st.title("DGM - Warehouse Management System")
+    with col2:
+        st.image("logo.png", use_column_width=True)
+    
+    # Fetch and display data from Supabase
     clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
     skus = fetch_table_data('skus')
+    current_stock = current_stock_table(stock, clients, skus)
 
-    st.title("Record Inbound")
+    clients = clients[['client_id', 'Name', 'Phone', 'email']]
 
-    # Form to record inbound stock
-    with st.form("add_stock_form"):
-        container = st.text_input("Container")
-        client_name = st.selectbox("Client Name", clients['Name'])
-        sku = st.selectbox("SKU", skus['SKU'])
-        quantity = st.number_input("Quantity", min_value=1)
+    inbound = fetch_table_data('inbound')
+    inbound = inbound.merge(skus, on = 'sku_id')
+    inbound = inbound.merge(clients[['client_id', 'Name']], on='client_id')
+    inbound = inbound[['Date', 'Name', 'SKU', 'Quantity']]
 
-        submitted = st.form_submit_button("Record Inbound")
+    outbound = fetch_table_data('outbound')
+    outbound = outbound.merge(skus, on = 'sku_id')
+    outbound = outbound.merge(clients[['client_id', 'Name']], on='client_id')
+    outbound = outbound[['Date', 'Name', 'SKU', 'Quantity']]
 
-        if submitted:
-            # Get client and SKU IDs
-            client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
-            sku_id = int(skus.loc[skus['SKU'] == sku, 'sku_id'].values[0])
+    st.subheader("Current Stock")
+    st.dataframe(current_stock, hide_index=True)
 
-            # Check if stock already exists for the given SKU and client
-            existing_stock = stock.loc[(stock['sku_id'] == sku_id) & (stock['client_id'] == client_id)]
+    col1, col2 = st.columns(2)
 
-            if not existing_stock.empty:
-                # Update existing stock quantity
-                existing_quantity = int(existing_stock['Quantity'].values[0])
-                new_quantity = existing_quantity + quantity
-                supabase_client.from_("stock").update({"Quantity": new_quantity}).match({
-                    "sku_id": sku_id, "client_id": client_id
-                }).execute()
-            else:
-                # Insert new stock record
-                supabase_client.from_("stock").insert([{
-                    "sku_id": sku_id, "client_id": client_id, "Quantity": quantity
-                }]).execute()
+    with col1:
+        st.subheader("Inbound to Stock")
+        st.dataframe(inbound, hide_index=True)
 
-            # Record the inbound transaction
-            supabase_client.from_("inbound").insert([{
-                "Container": container, "sku_id": sku_id, "client_id": client_id,
-                "Date": current_date, "Quantity": quantity
-            }]).execute()
-
-            st.success("Inbound record added successfully!")
+    with col2:
+        st.subheader("Outbound from Stock")
+        st.dataframe(outbound, hide_index=True)
+    
+    st.subheader("Clients")
+    st.dataframe(clients, hide_index=True)
