@@ -4,7 +4,8 @@ from datetime import datetime
 import page_dashboard
 import page_inbound
 import page_outbound
-import page_client
+import page_add_sku
+#import page_client
 
 # Page configuration
 st.set_page_config(page_title="DGM - Warehouse Management System", 
@@ -20,7 +21,7 @@ current_date = datetime.now().strftime("%Y-%m-%d")
 # Sidebar Navigation
 st.sidebar.title("Navigation")
 
-page = st.sidebar.radio("Go to", ["Dashboard", "Record Inbound", "Record Outbound"])
+page = st.sidebar.radio("Go to", ["Dashboard", "Record Inbound", "Record Outbound", "Add SKU"])
 
 # Dashboard Page
 if page == "Dashboard":
@@ -31,6 +32,9 @@ elif page == "Record Inbound":
  
 elif page == "Record Outbound":
     page_outbound.show_page_outbound()
+
+elif page == "Add SKU":
+    page_add_sku.show_page_add_sku()
     
 #elif page == "Add Client":
 #    page_client.show_page_client()
