@@ -20,9 +20,7 @@ def show_page_outbound():
     with st.form("record_outbound_form"):
         client_name = st.selectbox("Client Name", clients['Name'])
         invoice = st.text_input("Invoice Number")
-
         col1, col2 = st.columns(2)
-
         # Grouping SKUs by invoice number
         with col1:
             # Selectbox for up to 10 SKUs, default value set to None or "" to prevent accidental selection

@@ -23,24 +23,23 @@ def show_page_dashboard():
 
     inbound = fetch_table_data('inbound')
     inbound = inbound.merge(skus, on = 'sku_id')
-    inbound = inbound.merge(clients[['client_id', 'Name']], on='client_id')
-    inbound = inbound[['Date', 'Container', 'Name', 'SKU', 'Quantity']]
+    inbound['Total Length'] = inbound['Quantity'] * inbound['Length']
+    inbound = inbound[['Date', 'Container', 'SKU', 'Quantity', 'Total Length']]
 
     outbound = fetch_table_data('outbound')
     outbound = outbound.merge(skus, on = 'sku_id')
-    outbound = outbound.merge(clients[['client_id', 'Name']], on='client_id')
-    outbound = outbound[['Date', 'Invoice Number', 'Name', 'SKU', 'Quantity']]
+    outbound['Total Length'] = outbound['Quantity'] * outbound['Length']
+    outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length']]
 
-    st.subheader("Current Stock")
-    st.dataframe(current_stock, hide_index=True)
-
-    col1, col2 = st.columns(2)
-
+    col1, col2, col3 = st.columns(3)
     with col1:
-        st.subheader("Inbound to Stock")
-        st.dataframe(inbound, hide_index=True)
+        st.subheader("Current Stock")
+        st.dataframe(current_stock, hide_index=True)
 
     with col2:
+        st.subheader("Inbound to Stock")
+        st.dataframe(inbound, hide_index=True)
+    with col3:
         st.subheader("Outbound from Stock")
         st.dataframe(outbound, hide_index=True)
     
