@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from supabase_connection import supabase_client, fetch_table_data
-from utils import current_stock_table, generate_inbound_table
+from utils import current_stock_table, generate_inbound_table, get_next_sku_id
 from datetime import datetime
 
 current_date = datetime.now().strftime("%Y-%m-%d")
@@ -16,13 +16,14 @@ def show_page_add_sku():
         size = st.text_input("Size")
         length = st.number_input("Length", min_value=0)
         sku = f"sc{schedule} - {size} - {length}ft"
-
+        id = get_next_sku_id()
         submitted = st.form_submit_button("Add SKU")
         if submitted:
             if sku and length:
                 # Add SKU to the database
                 insert = supabase_client.from_('skus').insert([
-                    {'SKU': sku, 
+                    {'sku_id': id,
+                     'SKU': sku, 
                      'Length': length, 
                      'Schedule': schedule, 
                      'Size': size}

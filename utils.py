@@ -17,6 +17,10 @@ def get_next_outbound_id():
     outbound = fetch_table_data('outbound')
     return outbound['id'].max() + 1
 
+def get_next_sku_id():
+    skus = fetch_table_data('skus')
+    return skus['sku_id'].max() + 1
+
 # Helper function to get available client IDs
 def get_available_client_ids():
     clients = fetch_table_data('clients')
