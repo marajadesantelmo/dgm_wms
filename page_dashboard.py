@@ -23,7 +23,7 @@ def show_page_dashboard():
     skus = fetch_table_data('skus')
     current_stock = current_stock_table(stock, skus)
 
-    clients = clients[['client_id', 'Name', 'Phone', 'email']]
+    #clients = clients[['client_id', 'Name', 'Phone', 'email']]
 
     inbound = fetch_table_data('inbound')
     inbound_table = generate_inbound_table(inbound, skus)
