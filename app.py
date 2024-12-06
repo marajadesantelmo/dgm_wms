@@ -53,7 +53,7 @@ def current_stock_table(stock, clients, skus):
 current_date = datetime.now().strftime("%Y-%m-%d")
 # Sidebar Navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Dashboard", "Add Stock", "Record Outbound", "Add Client"])
+page = st.sidebar.radio("Go to", ["Dashboard", "Add Stock", "Record Outbound", "Record Inbound"])
 
 # Dashboard Page
 if page == "Dashboard":
@@ -100,7 +100,7 @@ if page == "Dashboard":
 
     
 # Add Stock Page
-elif page == "Add Stock":
+elif page == "Record Inbound":
     st.title("Add Stock")
     
     # Fetch available clients and SKUs
