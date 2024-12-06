@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
+from utils import get_next_outbound_id
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
