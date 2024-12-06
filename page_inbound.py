@@ -17,8 +17,32 @@ def show_page_inbound():
     with st.form("add_stock_form"):
         container = st.text_input("Container")
         client_name = st.selectbox("Client Name", clients['Name'])
-        sku = st.selectbox("SKU", skus['SKU'])
-        quantity = st.number_input("Quantity", min_value=1)
+        
+        col1, col2 = st.columns(2)
+
+        with col1:
+            sku = st.selectbox("1. SKU", skus['SKU'])
+            sku2 = st.selectbox("2. SKU", skus['SKU'])
+            sku3 = st.selectbox("3. SKU", skus['SKU'])
+            sku4 = st.selectbox("4. SKU", skus['SKU'])
+            sku5 = st.selectbox("5. SKU", skus['SKU'])
+            sku6 = st.selectbox("6. SKU", skus['SKU'])
+            sku7 = st.selectbox("7. SKU", skus['SKU'])
+            sku8 = st.selectbox("8. SKU", skus['SKU'])
+            sku9 = st.selectbox("9. SKU", skus['SKU'])
+            sku10 = st.selectbox("10. SKU", skus['SKU'])
+
+        with col2:
+            quantity = st.number_input("Quantity", min_value=1)
+            quantity2 = st.number_input("Quantity", min_value=1)
+            quantity3 = st.number_input("Quantity", min_value=1)
+            quantity4 = st.number_input("Quantity", min_value=1)
+            quantity5 = st.number_input("Quantity", min_value=1)
+            quantity6 = st.number_input("Quantity", min_value=1)
+            quantity7 = st.number_input("Quantity", min_value=1)
+            quantity8 = st.number_input("Quantity", min_value=1)
+            quantity9 = st.number_input("Quantity", min_value=1)
+            quantity10 = st.number_input("Quantity", min_value=1)
 
         submitted = st.form_submit_button("Record Inbound")
 
