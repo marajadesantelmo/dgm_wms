@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
 import page_dashboard
 import page_inbound

@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from supabase_connection import supabase_client, fetch_table_data
-from utils import current_stock_table, inbound_table
+from utils import current_stock_table, generate_inbound_table
 from datetime import datetime
 
 current_date = datetime.now().strftime("%Y-%m-%d")
@@ -11,7 +11,7 @@ def show_page_inbound():
     stock = fetch_table_data('stock')
     skus = fetch_table_data('skus')
     inbound = fetch_table_data('inbound')
-    inbound_table = inbound_table(inbound, skus)
+    inbound_table = generate_inbound_table(inbound, skus)
 
     st.title("Record Inbound")
     # Form to record inbound stock

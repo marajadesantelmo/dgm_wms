@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from supabase_connection import supabase_client, fetch_table_data
-from utils import current_stock_table, inbound_table, outbound_table
+from utils import current_stock_table, generate_inbound_table, generate_outbound_table
 from datetime import datetime
 
 current_date = datetime.now().strftime("%Y-%m-%d")
@@ -22,10 +22,10 @@ def show_page_dashboard():
     clients = clients[['client_id', 'Name', 'Phone', 'email']]
 
     inbound = fetch_table_data('inbound')
-    inbound_table = inbound_table(inbound, skus)
+    inbound_table = generate_inbound_table(inbound, skus)
 
     outbound = fetch_table_data('outbound')
-    outbound_table = outbound_table(outbound, skus)
+    outbound_table = generate_outbound_table(outbound, skus)
 
     col1, col2, col3 = st.columns(3)
     with col1:

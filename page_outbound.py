@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
-from utils import get_next_outbound_id, outbound_table, current_stock_table
+from utils import get_next_outbound_id, generate_outbound_table, current_stock_table
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -16,7 +16,7 @@ def show_page_outbound():
     #stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
     stock = stock.merge(skus, on='sku_id')
     outbount = fetch_table_data('outbound')
-    outbound_table = outbound_table(outbount, skus)
+    outbound_table = generate_outbound_table(outbount, skus)
     current_stock = current_stock_table(stock, skus)
 
     # Form to record outbound stock by invoice number

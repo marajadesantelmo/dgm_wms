@@ -37,13 +37,13 @@ def current_stock_table(stock, skus):
     current_stock = stock[['SKU', 'Quantity', 'Total Length']]
     return current_stock
 
-def inbound_table(inbound, skus):
+def generate_inbound_table(inbound, skus):
     inbound = inbound.merge(skus, on = 'sku_id')
     inbound['Total Length'] = inbound['Quantity'] * inbound['Length']
     inbound = inbound[['Date', 'Container', 'SKU', 'Quantity', 'Total Length']]
     return inbound
 
-def outbound_table(outbound, skus):
+def generate_outbound_table(outbound, skus):
     outbound = outbound.merge(skus, on = 'sku_id')
     outbound['Total Length'] = outbound['Quantity'] * outbound['Length']
     outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length']]
