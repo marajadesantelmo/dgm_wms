@@ -34,7 +34,7 @@ def current_stock_table(stock, skus):
     stock.drop(columns=['sku_id', 'client_id'], inplace=True)
     stock.rename(columns={'Name': 'Client Name'}, inplace=True)
     stock['Total Length'] = stock['Quantity'] * stock['Length']
-    current_stock = stock[['SKU', 'Quantity', 'Total Length']]
+    current_stock = stock[['SKU', 'Lenth', 'Quantity', 'Total Length']]
     return current_stock
 
 def generate_inbound_table(inbound, skus):
