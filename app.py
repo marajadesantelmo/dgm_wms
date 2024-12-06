@@ -221,7 +221,7 @@ elif page == "Record Outbound":
     
     # Display current stock
     st.subheader("Current Stock")
-    st.dataframe(stock[['sku_id', 'SKU', 'Name', 'quantity']], hide_index=True)
+    st.dataframe(stock[['sku_id', 'SKU', 'Name', 'Quantity']], hide_index=True)
 # Add Client Page
 elif page == "Add Client":
     st.title("Add Client")
