@@ -30,7 +30,7 @@ def show_page_inbound():
         with col2:
             # Number inputs for quantities of up to 10 items
             quantities = [
-                st.number_input(f"Quantity item {i+1}", min_value=1, key=f"qty_{i}")
+                st.number_input(f"Quantity item {i+1}", min_value=0, key=f"qty_{i}")
                 for i in range(10)
             ]
 
