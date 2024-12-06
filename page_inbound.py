@@ -21,9 +21,9 @@ def show_page_inbound():
         col1, col2 = st.columns(2)
 
         with col1:
-            # Selectbox for up to 10 SKUs
+            # Selectbox for up to 10 SKUs, default value set to None or "" to prevent accidental selection
             skus_selected = [
-                st.selectbox(f"{i+1}. SKU", skus['SKU'], key=f"sku_{i}")
+                st.selectbox(f"{i+1}. SKU", [""] + skus['SKU'].tolist(), key=f"sku_{i}")
                 for i in range(10)
             ]
 
@@ -37,10 +37,11 @@ def show_page_inbound():
         submitted = st.form_submit_button("Record Inbound")
 
         if submitted:
-            # Filter out items where SKU or quantity is not filled
+            # Filter out items where SKU is empty or quantity is 0
             inbound_data = []
             for i in range(10):
-                if skus_selected[i] and quantities[i] > 0:
+                # Check that the SKU is selected (not empty) and quantity is greater than 0
+                if skus_selected[i] and skus_selected[i] != "" and quantities[i] > 0:
                     sku_id = int(skus.loc[skus['SKU'] == skus_selected[i], 'sku_id'].values[0])
                     quantity = quantities[i]
 
@@ -75,3 +76,4 @@ def show_page_inbound():
                 st.success("Inbound records added successfully!")
             else:
                 st.warning("No valid items were selected.")
+
