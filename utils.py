@@ -1,4 +1,4 @@
-from supabase_connection import supabase_client, fetch_table_data
+from supabase_connection import fetch_table_data
 
 # Helper function to get the next client ID
 def get_next_client_id():
