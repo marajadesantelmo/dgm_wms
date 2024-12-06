@@ -20,7 +20,7 @@ current_date = datetime.now().strftime("%Y-%m-%d")
 # Sidebar Navigation
 st.sidebar.title("Navigation")
 
-page = st.sidebar.radio("Go to", ["Dashboard", "Record Inbound", "Record Outbound", "Add Client"])
+page = st.sidebar.radio("Go to", ["Dashboard", "Record Inbound", "Record Outbound"])
 
 # Dashboard Page
 if page == "Dashboard":
@@ -32,5 +32,5 @@ elif page == "Record Inbound":
 elif page == "Record Outbound":
     page_outbound.show_page_outbound()
     
-elif page == "Add Client":
-    page_client.show_page_client()
+#elif page == "Add Client":
+#    page_client.show_page_client()
