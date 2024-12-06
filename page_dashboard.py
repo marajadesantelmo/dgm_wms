@@ -29,7 +29,7 @@ def show_page_dashboard():
     outbound = fetch_table_data('outbound')
     outbound = outbound.merge(skus, on = 'sku_id')
     outbound = outbound.merge(clients[['client_id', 'Name']], on='client_id')
-    outbound = outbound[['Date', 'Name', 'SKU', 'Quantity']]
+    outbound = outbound[['Date', 'Name', 'SKU', 'Quantity', 'Invoice Number']]
 
     st.subheader("Current Stock")
     st.dataframe(current_stock, hide_index=True)
