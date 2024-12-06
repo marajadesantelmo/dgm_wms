@@ -10,6 +10,7 @@ def show_page_dashboard():
     col1, col2 = st.columns([7, 1])
     with col1:
         st.title("DGM - Warehouse Management System")
+        st.subheader("For HBG Supply LLC")
     with col2:
         st.image("logo.png", use_container_width=True)
     st.markdown(
