@@ -15,11 +15,10 @@ def show_page_add_sku():
         schedule = st.number_input("Schedule", min_value=0)
         size = st.text_input("Size")
         length = st.number_input("Length", min_value=0)
-        sku = f"sc{schedule} - {size} - {length}ft"
-        
         submitted = st.form_submit_button("Add SKU")
         if submitted:
-            if sku and length:
+            if schedule and size and length:
+                sku = f"sch{schedule} - {size} - {length}ft"
                 id = get_next_sku_id()
                 # Add SKU to the database
                 insert = supabase_client.from_('skus').insert([
