@@ -2,6 +2,11 @@ import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
+#import page_dashboard
+import page_inbound
+#import page_outbound
+#import page_clients
+
             
 # Page configuration
 st.set_page_config(page_title="DGM - Warehouse Management System", 
@@ -12,43 +17,6 @@ st.set_page_config(page_title="DGM - Warehouse Management System",
 with open("styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-
-# Helper function to get the next client ID
-def get_next_client_id():
-    clients = fetch_table_data('clients')
-    if clients.empty:
-        return 1
-    else:
-        return clients['client_id'].max() + 1
-
-# Helper function to get the next item ID
-def get_next_inbound_id():
-    inbound = fetch_table_data('inbound')
-    return inbound['id'].max() + 1
-
-def get_next_outbound_id():
-    inbound = fetch_table_data('outbound')
-    return inbound['id'].max() + 1
-
-# Helper function to get available client IDs
-def get_available_client_ids():
-    clients = fetch_table_data('clients')
-    return clients['client_id'].tolist() if not clients.empty else []
-
-# Helper function to get available clients
-def get_available_clients():
-    clients = fetch_table_data('clients')
-    if not clients.empty:
-        return clients[['client_id', 'Name']].to_dict('records')
-    return []
-
-def current_stock_table(stock, clients, skus):
-    stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
-    stock = stock.merge(skus, on = 'sku_id')
-    stock.drop(columns=['sku_id', 'client_id'], inplace=True)
-    stock.rename(columns={'Name': 'Client Name'}, inplace=True)
-    current_stock = stock[['Client Name', 'SKU', 'Quantity']]
-    return current_stock
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 # Sidebar Navigation
@@ -101,52 +69,8 @@ if page == "Dashboard":
 
 # Add Stock Page
 elif page == "Record Inbound":
-    st.title("Add Stock")
-
-    # Fetch data from tables
-    clients = fetch_table_data('clients')
-    stock = fetch_table_data('stock')
-    skus = fetch_table_data('skus')
-
-    st.title("Record Inbound")
-
-    # Form to record inbound stock
-    with st.form("add_stock_form"):
-        container = st.text_input("Container")
-        client_name = st.selectbox("Client Name", clients['Name'])
-        sku = st.selectbox("SKU", skus['SKU'])
-        quantity = st.number_input("Quantity", min_value=1)
-
-        submitted = st.form_submit_button("Record Inbound")
-
-        if submitted:
-            # Get client and SKU IDs
-            client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
-            sku_id = int(skus.loc[skus['SKU'] == sku, 'sku_id'].values[0])
-
-            # Check if stock already exists for the given SKU and client
-            existing_stock = stock.loc[(stock['sku_id'] == sku_id) & (stock['client_id'] == client_id)]
-
-            if not existing_stock.empty:
-                # Update existing stock quantity
-                existing_quantity = int(existing_stock['Quantity'].values[0])
-                new_quantity = existing_quantity + quantity
-                supabase_client.from_("stock").update({"Quantity": new_quantity}).match({
-                    "sku_id": sku_id, "client_id": client_id
-                }).execute()
-            else:
-                # Insert new stock record
-                supabase_client.from_("stock").insert([{
-                    "sku_id": sku_id, "client_id": client_id, "Quantity": quantity
-                }]).execute()
-
-            # Record the inbound transaction
-            supabase_client.from_("inbound").insert([{
-                "Container": container, "sku_id": sku_id, "client_id": client_id,
-                "Date": current_date, "Quantity": quantity
-            }]).execute()
-
-            st.success("Inbound record added successfully!")
+    page_inbound.show_page_inbound()
+ 
 
 # Record Outbound Page
 elif page == "Record Outbound":
