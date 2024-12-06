@@ -10,6 +10,11 @@ def show_page_dashboard():
     col1, col2 = st.columns([7, 1])
     with col1:
         st.title("DGM - Warehouse Management System")
+        st.markdown(
+        """
+        <hr style="border: 1px solid darkgreen; margin-top: 20px; margin-bottom: 20px;">
+        """,
+        unsafe_allow_html=True)
     with col2:
         st.image("logo.png", use_container_width=True)
     
@@ -31,11 +36,7 @@ def show_page_dashboard():
     with col1:
         st.subheader("Current Stock")
         st.dataframe(current_stock, hide_index=True)
-        st.markdown(
-        """
-        <hr style="border: 2px solid darkgreen; margin-top: 20px; margin-bottom: 20px;">
-        """,
-        unsafe_allow_html=True)
+
     with col2:
         st.subheader("Inbound to Stock")
         st.dataframe(inbound_table, hide_index=True)
