@@ -34,5 +34,6 @@ def current_stock_table(stock, clients, skus):
     stock = stock.merge(skus, on = 'sku_id')
     stock.drop(columns=['sku_id', 'client_id'], inplace=True)
     stock.rename(columns={'Name': 'Client Name'}, inplace=True)
-    current_stock = stock[['Client Name', 'SKU', 'Quantity']]
+    stock['Total Length'] = stock['Quantity'] * stock['Length']
+    current_stock = stock[['Client Name', 'SKU', 'Quantity', 'Total Length']]
     return current_stock
