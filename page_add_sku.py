@@ -3,9 +3,7 @@ import pandas as pd
 from supabase_connection import supabase_client, fetch_table_data
 from utils import current_stock_table, generate_inbound_table, get_next_sku_id
 from datetime import datetime
-
 current_date = datetime.now().strftime("%Y-%m-%d")
-
 def show_page_add_sku():
     skus = fetch_table_data('skus')
     st.title("Add SKU")
