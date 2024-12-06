@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from supabase_connection import supabase_client, fetch_table_data
-from utils import current_stock_table
+from utils import current_stock_table, inbound_table, outbound_table
 from datetime import datetime
 
 current_date = datetime.now().strftime("%Y-%m-%d")
@@ -17,19 +17,15 @@ def show_page_dashboard():
     clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
     skus = fetch_table_data('skus')
-    current_stock = current_stock_table(stock, clients, skus)
+    current_stock = current_stock_table(stock, skus)
 
     clients = clients[['client_id', 'Name', 'Phone', 'email']]
 
     inbound = fetch_table_data('inbound')
-    inbound = inbound.merge(skus, on = 'sku_id')
-    inbound['Total Length'] = inbound['Quantity'] * inbound['Length']
-    inbound = inbound[['Date', 'Container', 'SKU', 'Quantity', 'Total Length']]
+    inbound_table = inbound_table(inbound, skus)
 
     outbound = fetch_table_data('outbound')
-    outbound = outbound.merge(skus, on = 'sku_id')
-    outbound['Total Length'] = outbound['Quantity'] * outbound['Length']
-    outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length']]
+    outbound_table = outbound_table(outbound, skus)
 
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -38,10 +34,10 @@ def show_page_dashboard():
 
     with col2:
         st.subheader("Inbound to Stock")
-        st.dataframe(inbound, hide_index=True)
+        st.dataframe(inbound_table, hide_index=True)
     with col3:
         st.subheader("Outbound from Stock")
-        st.dataframe(outbound, hide_index=True)
+        st.dataframe(outbound_table, hide_index=True)
     
     st.subheader("Clients")
     st.dataframe(clients, hide_index=True)

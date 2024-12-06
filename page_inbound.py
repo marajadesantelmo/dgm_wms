@@ -10,13 +10,14 @@ def show_page_inbound():
     clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
     skus = fetch_table_data('skus')
+    inbound = fetch_table_data('inbound')
+    inbound_table = inbound_table(inbound, skus)
 
     st.title("Record Inbound")
-
     # Form to record inbound stock
     with st.form("add_stock_form"):
         container = st.text_input("Container")
-        client_name = st.selectbox("Client Name", clients['Name'])
+        #client_name = st.selectbox("Client Name", clients['Name'])
 
         col1, col2 = st.columns(2)
 
@@ -46,8 +47,8 @@ def show_page_inbound():
                     quantity = quantities[i]
 
                     # Get client_id
-                    client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
-
+                    #client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
+                    client_id = 5
                     # Check if stock already exists for the given SKU and client
                     existing_stock = stock.loc[(stock['sku_id'] == sku_id) & (stock['client_id'] == client_id)]
 
@@ -76,4 +77,12 @@ def show_page_inbound():
                 st.success("Inbound records added successfully!")
             else:
                 st.warning("No valid items were selected.")
+
+    st.subheader("Inbound to Stock")
+    st.dataframe(inbound_table, hide_index=True)
+
+    
+
+    
+
 

@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
-from utils import get_next_outbound_id
+from utils import get_next_outbound_id, outbound_table, current_stock_table
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -13,12 +13,15 @@ def show_page_outbound():
     clients = fetch_table_data('clients')
     stock = fetch_table_data('stock')
     skus = fetch_table_data('skus')
-    stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
+    #stock = stock.merge(clients[['client_id', 'Name']], on='client_id')
     stock = stock.merge(skus, on='sku_id')
+    outbount = fetch_table_data('outbound')
+    outbound_table = outbound_table(outbount, skus)
+    current_stock = current_stock_table(stock, skus)
 
     # Form to record outbound stock by invoice number
     with st.form("record_outbound_form"):
-        client_name = st.selectbox("Client Name", clients['Name'])
+        #client_name = st.selectbox("Client Name", clients['Name'])
         invoice = st.text_input("Invoice Number")
         col1, col2 = st.columns(2)
         # Grouping SKUs by invoice number
@@ -46,14 +49,14 @@ def show_page_outbound():
                     sku_id = int(skus.loc[skus['SKU'] == skus_selected[i], 'sku_id'].values[0])
                     quantity = quantities[i]
 
-                    # Get client_id
-                    client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
-
-                    # Check if stock already exists for the given SKU and client
+                    # FIJO CLIENT ID
+                    #client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
+                    client_id = 5
+                    
                     existing_stock = stock.loc[(stock['sku_id'] == sku_id) & (stock['client_id'] == client_id)]
-
                     if existing_stock.empty:
-                        st.error(f"No stock available for SKU {skus_selected[i]} and Client {client_name}.")
+                        #st.error(f"No stock available for SKU {skus_selected[i]} and Client {client_name}.")
+                        st.error(f"No stock available for SKU {skus_selected[i]}")
                     else:
                         current_quantity = int(existing_stock['Quantity'].values[0])
 
@@ -97,6 +100,11 @@ def show_page_outbound():
             else:
                 st.warning("No valid items selected or quantities exceed available stock.")
 
-    # Display current stock
-    st.subheader("Current Stock")
-    st.dataframe(stock[['sku_id', 'SKU', 'Name', 'Quantity']], hide_index=True)
+    col1, col2 = st.columns(2)
+    with col1: 
+        st.subheader("Outbound from Stock")
+        st.dataframe(outbound_table, hide_index=True)
+    with col2:
+        # Display current stock
+        st.subheader("Current Stock")
+        st.dataframe(current_stock, hide_index=True)
