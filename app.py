@@ -4,7 +4,7 @@ from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
 #import page_dashboard
 import page_inbound
-#import page_outbound
+import page_outbound
 #import page_clients
 
             
