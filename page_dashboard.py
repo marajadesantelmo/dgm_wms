@@ -27,19 +27,25 @@ def show_page_dashboard():
     outbound = fetch_table_data('outbound')
     outbound_table = generate_outbound_table(outbound, skus)
 
-    col1, col2, col3 = st.columns(3)
+    # Create three columns with a vertical divider
+    col1, col_divider, col2 = st.columns([3, 0.1, 3])
+    
     with col1:
         st.subheader("Current Stock")
         st.dataframe(current_stock, hide_index=True)
+    
+    # Add a vertical green line in the middle column
+    with col_divider:
         st.markdown(
-        """
-        <hr style="border: 2px solid darkgreen; margin-top: 20px; margin-bottom: 20px;">
-        """,
-        unsafe_allow_html=True)
+            """
+            <div style="border-left: 3px solid darkgreen; height: 100%; margin: auto;"></div>
+            """,
+            unsafe_allow_html=True
+        )
+    
     with col2:
         st.subheader("Inbound to Stock")
         st.dataframe(inbound_table, hide_index=True)
-    with col3:
         st.subheader("Outbound from Stock")
         st.dataframe(outbound_table, hide_index=True)
     
