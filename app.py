@@ -101,6 +101,10 @@ if page == "Dashboard":
     
 # Record Inbound Page
 elif page == "Record Inbound":
+    clients = fetch_table_data('clients')
+    stock = fetch_table_data('stock')
+    skus = fetch_table_data('skus')
+
     if "items" not in st.session_state:
         st.session_state.items = [{"SKU": "", "Quantity": 1}]
 
