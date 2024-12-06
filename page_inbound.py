@@ -33,16 +33,16 @@ def show_page_inbound():
             sku10 = st.selectbox("10. SKU", skus['SKU'])
 
         with col2:
-            quantity = st.number_input("Quantity", min_value=1)
-            quantity2 = st.number_input("Quantity", min_value=1)
-            quantity3 = st.number_input("Quantity", min_value=1)
-            quantity4 = st.number_input("Quantity", min_value=1)
-            quantity5 = st.number_input("Quantity", min_value=1)
-            quantity6 = st.number_input("Quantity", min_value=1)
-            quantity7 = st.number_input("Quantity", min_value=1)
-            quantity8 = st.number_input("Quantity", min_value=1)
-            quantity9 = st.number_input("Quantity", min_value=1)
-            quantity10 = st.number_input("Quantity", min_value=1)
+            quantity = st.number_input("Quantity item 1", min_value=1)
+            quantity2 = st.number_input("Quantity item 2", min_value=1)
+            quantity3 = st.number_input("Quantity item 3", min_value=1)
+            quantity4 = st.number_input("Quantity item 4", min_value=1)
+            quantity5 = st.number_input("Quantity item 5", min_value=1)
+            quantity6 = st.number_input("Quantity item 6", min_value=1)
+            quantity7 = st.number_input("Quantity item 7", min_value=1)
+            quantity8 = st.number_input("Quantity item 8", min_value=1)
+            quantity9 = st.number_input("Quantity item 9", min_value=1)
+            quantity10 = st.number_input("Quantity item 10", min_value=1)
 
         submitted = st.form_submit_button("Record Inbound")
 
