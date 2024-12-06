@@ -31,7 +31,20 @@ def show_page_dashboard():
     with col1:
         st.subheader("Current Stock")
         st.dataframe(current_stock, hide_index=True)
-
+        st.markdown(
+            """
+            <style>
+            .divider {
+                height: 100%;
+                width: 2px;
+                background-color: darkgreen;
+                margin: auto;
+            }
+            </style>
+            <div class="divider"></div>
+            """,
+            unsafe_allow_html=True
+        )
     with col2:
         st.subheader("Inbound to Stock")
         st.dataframe(inbound_table, hide_index=True)
