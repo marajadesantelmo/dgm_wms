@@ -32,9 +32,9 @@ def show_page_outbound():
             ]
 
         with col2:
-            # Number inputs for quantities of up to 10 items
-            quantities = [
-                st.number_input(f"Quantity item {i+1}", min_value=0, key=f"qty_{i}")
+            # Number inputs for lengths of up to 10 items
+            lengths = [
+                st.number_input(f"Length item {i+1}", min_value=0, key=f"length_{i}")
                 for i in range(10)
             ]
 
@@ -44,15 +44,18 @@ def show_page_outbound():
             # Filter out items where SKU is empty or quantity is 0
             outbound_data = []
             for i in range(10):
-                if skus_selected[i] and quantities[i] > 0:
+                if skus_selected[i] and lengths[i] > 0:
                     sku_id = int(skus.loc[skus['SKU'] == skus_selected[i], 'sku_id'].values[0])
-                    quantity = quantities[i]
+                    length = lengths[i]
 
                     # FIJO CLIENT ID
                     #client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
                     client_id = 5
                     
                     existing_stock = stock.loc[(stock['sku_id'] == sku_id) & (stock['client_id'] == client_id)]
+                    unit_length = skus.loc[skus['sku_id'] == sku_id, 'Length'].values[0]
+                    quantity = int(length / unit_length)
+
                     if existing_stock.empty:
                         #st.error(f"No stock available for SKU {skus_selected[i]} and Client {client_name}.")
                         st.error(f"No stock available for SKU {skus_selected[i]}")
@@ -97,7 +100,7 @@ def show_page_outbound():
                     else:
                         st.error(f"Failed to create outbound record for SKU {record['sku_id']}.")
             else:
-                st.warning("No valid items selected or quantities exceed available stock.")
+                st.warning("No valid items selected or lengths exceed available stock.")
 
     col1, col2 = st.columns(2)
     with col1: 
