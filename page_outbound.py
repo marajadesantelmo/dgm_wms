@@ -138,14 +138,20 @@ def show_page_outbound():
 
                 pdf = generate_invoice(invoice, outbound_data)
                 pdf_output = pdf.output(dest='S').encode('latin1')
-                st.download_button(
-                    label="Download Invoice",
-                    data=pdf_output,
-                    file_name=f"invoice_{invoice}.pdf",
-                    mime="application/pdf"
-                )
+                
+                # Store the PDF output in session state
+                st.session_state.pdf_output = pdf_output
+                st.session_state.invoice = invoice
             else:
                 st.warning("No valid items selected or lengths exceed available stock.")
+
+    if 'pdf_output' in st.session_state and 'invoice' in st.session_state:
+        st.download_button(
+            label="Download Invoice",
+            data=st.session_state.pdf_output,
+            file_name=f"invoice_{st.session_state.invoice}.pdf",
+            mime="application/pdf"
+        )
 
     col1, col2 = st.columns(2)
     with col1: 
