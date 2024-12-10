@@ -1,5 +1,6 @@
 from supabase_connection import fetch_table_data
 from fpdf import FPDF
+from datetime import datetime
 # Helper function to get the next client ID
 def get_next_client_id():
     clients = fetch_table_data('clients')
@@ -53,6 +54,7 @@ def generate_outbound_table(outbound, skus):
     return outbound
 
 def generate_invoice(invoice_number, outbound_data):
+    current_date = datetime.now().strftime("%Y-%m-%d")
     pdf = FPDF()
     pdf.add_page()
     
