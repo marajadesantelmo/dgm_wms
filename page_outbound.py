@@ -5,12 +5,11 @@ from datetime import datetime
 from utils import get_next_outbound_id, generate_outbound_table, current_stock_table
 from fpdf import FPDF
 
-def generate_invoice(invoice_number, outbound_data, logo_path="logo.png"):
+def generate_invoice(invoice_number, outbound_data):
     pdf = FPDF()
     pdf.add_page()
     
     # Add logo
-    pdf.image(logo_path, 10, 8, 33)
     
     # Add invoice title
     pdf.set_font("Arial", size=12)
