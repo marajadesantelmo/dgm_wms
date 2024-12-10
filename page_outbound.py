@@ -2,43 +2,7 @@ import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
-from utils import get_next_outbound_id, generate_outbound_table, current_stock_table
-from fpdf import FPDF
-
-def generate_invoice(invoice_number, outbound_data):
-    pdf = FPDF()
-    pdf.add_page()
-    
-    # Add logo
-    
-    # Add invoice title
-    pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt="Invoice", ln=True, align="C")
-    
-    # Add invoice number and date
-    pdf.set_font("Arial", size=10)
-    pdf.cell(200, 10, txt=f"Invoice Number: {invoice_number}", ln=True, align="L")
-    pdf.cell(200, 10, txt=f"Date: {current_date}", ln=True, align="L")
-    
-    # Add table header
-    pdf.set_font("Arial", size=10, style='B')
-    pdf.cell(40, 10, txt="SKU", border=1)
-    pdf.cell(40, 10, txt="Client ID", border=1)
-    pdf.cell(40, 10, txt="Quantity", border=1)
-    pdf.cell(40, 10, txt="Date", border=1)
-    pdf.ln()
-    
-    # Add table rows
-    pdf.set_font("Arial", size=10)
-    for record in outbound_data:
-        pdf.cell(40, 10, txt=str(record['sku_id']), border=1)
-        pdf.cell(40, 10, txt=str(record['client_id']), border=1)
-        pdf.cell(40, 10, txt=str(record['Quantity']), border=1)
-        pdf.cell(40, 10, txt=str(record['Date']), border=1)
-        pdf.ln()
-    
-    return pdf
-
+from utils import get_next_outbound_id, generate_outbound_table, current_stock_table, generate_invoice
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
