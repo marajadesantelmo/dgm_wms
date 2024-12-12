@@ -53,7 +53,7 @@ def generate_outbound_table(outbound, skus):
     outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length']]
     return outbound
 
-def generate_invoice(invoice_number, outbound_data):
+def generate_invoice(invoice_number, invoice_data):
     current_date = datetime.now().strftime("%Y-%m-%d")
     pdf = FPDF()
     pdf.add_page()
@@ -81,10 +81,10 @@ def generate_invoice(invoice_number, outbound_data):
     
     # Add table rows
     pdf.set_font("Arial", size=10)
-    for record in outbound_data:
+    for record in invoice_data:
         pdf.cell(40, 10, txt=str(record['sku_id']), border=1)
-#        pdf.cell(60, 10, txt=str(record['sku_description']), border=1)
-#        pdf.cell(40, 10, txt=str(record['total_length']), border=1)
+        pdf.cell(60, 10, txt=str(record['SKU']), border=1)
+        pdf.cell(40, 10, txt=str(record['total_length']), border=1)
         pdf.cell(40, 10, txt=str(record['client_id']), border=1)
         pdf.cell(40, 10, txt=str(record['Quantity']), border=1)
         pdf.cell(40, 10, txt=str(record['Date']), border=1)
