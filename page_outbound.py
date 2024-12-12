@@ -89,7 +89,7 @@ def show_page_outbound():
 
                                 inovice_data.append({
                                     'sku_id': sku_id,
-                                    'SKU': skus_selected[i],
+                                    'SKU': 'Probando',
                                     'Date': current_date,
                                     'Quantity': quantity,
                                     'total_length': length,
