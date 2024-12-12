@@ -43,6 +43,7 @@ def show_page_outbound():
         if submitted:
             # Filter out items where SKU is empty or quantity is 0
             outbound_data = []
+            invoice_data = []
             for i in range(10):
                 if skus_selected[i] and lengths[i] > 0:
                     sku_id = int(skus.loc[skus['SKU'] == skus_selected[i], 'sku_id'].values[0])
@@ -85,6 +86,16 @@ def show_page_outbound():
                                     'Quantity': quantity,
                                     'Invoice Number': invoice
                                 })
+
+                                invoice_data.append({
+                                    'sku_id': sku_id,
+                                    'sku': skus_selected[i],
+                                    'Date': current_date,
+                                    'Quantity': quantity,
+                                    'Length': length,
+                                    'Invoice Number': invoice
+                                })
+
                             else:
                                 st.error("Failed to update stock.")
             

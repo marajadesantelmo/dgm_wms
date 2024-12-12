@@ -59,7 +59,7 @@ def generate_invoice(invoice_number, outbound_data):
     pdf.add_page()
     
     # Add logo
-    
+    pdf.image("logo.png", x=160, y=10, w=40)
     # Add invoice title
     pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, txt="Invoice", ln=True, align="C")
@@ -72,6 +72,8 @@ def generate_invoice(invoice_number, outbound_data):
     # Add table header
     pdf.set_font("Arial", size=10, style='B')
     pdf.cell(40, 10, txt="SKU", border=1)
+    pdf.cell(60, 10, txt="Description", border=1)
+    pdf.cell(40, 10, txt="Total Length", border=1)
     pdf.cell(40, 10, txt="Client ID", border=1)
     pdf.cell(40, 10, txt="Quantity", border=1)
     pdf.cell(40, 10, txt="Date", border=1)
@@ -81,6 +83,8 @@ def generate_invoice(invoice_number, outbound_data):
     pdf.set_font("Arial", size=10)
     for record in outbound_data:
         pdf.cell(40, 10, txt=str(record['sku_id']), border=1)
+        pdf.cell(60, 10, txt=str(record['sku_description']), border=1)
+        pdf.cell(40, 10, txt=str(record['total_length']), border=1)
         pdf.cell(40, 10, txt=str(record['client_id']), border=1)
         pdf.cell(40, 10, txt=str(record['Quantity']), border=1)
         pdf.cell(40, 10, txt=str(record['Date']), border=1)
