@@ -85,7 +85,6 @@ def generate_invoice(invoice_number, invoice_data):
         pdf.cell(40, 10, txt=str(record['sku_id']), border=1)
         pdf.cell(60, 10, txt=str(record['SKU']), border=1)
         pdf.cell(40, 10, txt=str(record['total_length']), border=1)
-        pdf.cell(40, 10, txt=str(record['client_id']), border=1)
         pdf.cell(40, 10, txt=str(record['Quantity']), border=1)
         pdf.cell(40, 10, txt=str(record['Date']), border=1)
         pdf.ln()

@@ -89,7 +89,7 @@ def show_page_outbound():
 
                                 invoice_data.append({
                                     'sku_id': sku_id,
-                                    'SKU': 'Probando',
+                                    'SKU': skus_selected[i],
                                     'Date': current_date,
                                     'Quantity': quantity,
                                     'total_length': length,
