@@ -43,7 +43,7 @@ def show_page_outbound():
         if submitted:
             # Filter out items where SKU is empty or quantity is 0
             outbound_data = []
-            inovice_data = []
+            invoice_data = []
             for i in range(10):
                 if skus_selected[i] and lengths[i] > 0:
                     sku_id = int(skus.loc[skus['SKU'] == skus_selected[i], 'sku_id'].values[0])
@@ -87,7 +87,7 @@ def show_page_outbound():
                                     'Invoice Number': invoice
                                 })
 
-                                inovice_data.append({
+                                invoice_data.append({
                                     'sku_id': sku_id,
                                     'SKU': 'Probando',
                                     'Date': current_date,
@@ -111,7 +111,7 @@ def show_page_outbound():
                     else:
                         st.error(f"Failed to create outbound record for SKU {record['sku_id']}.")
 
-                pdf = generate_invoice(invoice, outbound_data)
+                pdf = generate_invoice(invoice, invoice_data)
                 pdf_output = pdf.output(dest='S').encode('latin1')
                 
                 # Store the PDF output in session state
