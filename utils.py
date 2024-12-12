@@ -59,7 +59,7 @@ def generate_invoice(invoice_number, outbound_data):
     pdf.add_page()
     
     # Add logo
-    pdf.image("logo.png", x=160, y=10, w=40)
+    #pdf.image("logo.png", x=160, y=10, w=40)
     # Add invoice title
     pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, txt="Invoice", ln=True, align="C")
