@@ -57,36 +57,56 @@ def generate_invoice(invoice_number, invoice_data):
     current_date = datetime.now().strftime("%Y-%m-%d")
     pdf = FPDF()
     pdf.add_page()
-    
-    # Add logo
-    #pdf.image("logo.png", x=160, y=10, w=40)
+
+    # Add logo (uncomment if logo is available)
+    # pdf.image("logo.png", x=10, y=10, w=40)
+
     # Add invoice title
-    pdf.set_font("Arial", size=12)
-    pdf.set_font("Arial", size=16)
+    pdf.set_font("Arial", style='B', size=16)
     pdf.set_text_color(0, 100, 0)  # Dark green color
-    pdf.cell(200, 10, txt="Dangerous Goods Management - Automatic Outbound Invoice", ln=True, align="C")
-    pdf.set_text_color(0, 0, 0)  # Reset to black color for the rest of the document
-    
-    # Add invoice number and date
+    pdf.cell(200, 10, txt="Dangerous Goods Management", ln=True, align="C")
+    pdf.cell(200, 10, txt="Automatic Outbound Invoice", ln=True, align="C")
+    pdf.ln(10)
+
+    # Add contact information
     pdf.set_font("Arial", size=10)
+    pdf.set_text_color(0, 0, 0)  # Reset to black
+    pdf.multi_cell(0, 8, txt=(
+        "6705 NW 36th Street\n"
+        "Suite 440\n"
+        "Miami, Florida 33166\n"
+        "Phone Number: +1-786-264-0050\n"
+        "Office Hours: Mon–Fri, 8am – 5pm\n"
+        "Email: miami@dgmflorida.com"
+    ), align="L")
+    pdf.ln(5)
+
+    # Add invoice number and date
+    pdf.set_font("Arial", style='B', size=10)
+    pdf.set_text_color(0, 100, 0)  # Dark green
     pdf.cell(200, 10, txt=f"Invoice Number: {invoice_number}", ln=True, align="L")
     pdf.cell(200, 10, txt=f"Date: {current_date}", ln=True, align="L")
-    
-    # Add table header
-    pdf.set_font("Arial", size=10, style='B')
-    pdf.cell(20, 10, txt="SKU id", border=1)
-    pdf.cell(40, 10, txt="Description", border=1)
-    pdf.cell(20, 10, txt="Total Length", border=1)
-    pdf.cell(20, 10, txt="Quantity", border=1)
+    pdf.ln(5)
+
+    # Add table header with dark green background
+    pdf.set_fill_color(0, 100, 0)  # Dark green
+    pdf.set_text_color(255, 255, 255)  # White
+    pdf.set_font("Arial", style='B', size=10)
+    pdf.cell(20, 10, txt="SKU id", border=1, fill=True, align="C")
+    pdf.cell(50, 10, txt="Description", border=1, fill=True, align="C")
+    pdf.cell(40, 10, txt="Total Length", border=1, fill=True, align="C")
+    pdf.cell(20, 10, txt="Quantity", border=1, fill=True, align="C")
     pdf.ln()
-    
+
     # Add table rows
+    pdf.set_text_color(0, 0, 0)  # Reset to black
     pdf.set_font("Arial", size=10)
     for record in invoice_data:
-        pdf.cell(20, 10, txt=str(record['sku_id']), border=1)
-        pdf.cell(40, 10, txt=str(record['SKU']), border=1)
-        pdf.cell(20, 10, txt=str(record['total_length']), border=1)
-        pdf.cell(20, 10, txt=str(record['Quantity']), border=1)
+        pdf.cell(20, 10, txt=str(record['sku_id']), border=1, align="C")
+        pdf.cell(50, 10, txt=str(record['SKU']), border=1, align="C")
+        pdf.cell(40, 10, txt=str(record['total_length']), border=1, align="C")
+        pdf.cell(20, 10, txt=str(record['Quantity']), border=1, align="C")
         pdf.ln()
-    
+
+    # Save the PDF and return it
     return pdf
