@@ -74,19 +74,19 @@ def generate_invoice(invoice_number, invoice_data):
     
     # Add table header
     pdf.set_font("Arial", size=10, style='B')
-    pdf.cell(40, 10, txt="SKU id", border=1)
-    pdf.cell(60, 10, txt="Description", border=1)
-    pdf.cell(40, 10, txt="Total Length", border=1)
-    pdf.cell(40, 10, txt="Quantity", border=1)
+    pdf.cell(20, 10, txt="SKU id", border=1)
+    pdf.cell(40, 10, txt="Description", border=1)
+    pdf.cell(20, 10, txt="Total Length", border=1)
+    pdf.cell(20, 10, txt="Quantity", border=1)
     pdf.ln()
     
     # Add table rows
     pdf.set_font("Arial", size=10)
     for record in invoice_data:
-        pdf.cell(10, 10, txt=str(record['sku_id']), border=1)
+        pdf.cell(20, 10, txt=str(record['sku_id']), border=1)
         pdf.cell(40, 10, txt=str(record['SKU']), border=1)
-        pdf.cell(10, 10, txt=str(record['total_length']), border=1)
-        pdf.cell(10, 10, txt=str(record['Quantity']), border=1)
+        pdf.cell(20, 10, txt=str(record['total_length']), border=1)
+        pdf.cell(20, 10, txt=str(record['Quantity']), border=1)
         pdf.ln()
     
     return pdf
