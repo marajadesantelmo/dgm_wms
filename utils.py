@@ -68,19 +68,6 @@ def generate_invoice(invoice_number, invoice_data):
     pdf.cell(200, 10, txt="Automatic Outbound Invoice", ln=True, align="C")
     pdf.ln(10)
 
-    # Add contact information
-    pdf.set_font("Arial", size=10)
-    pdf.set_text_color(0, 0, 0)  # Reset to black
-    pdf.multi_cell(0, 8, txt=(
-        "6705 NW 36th Street\n"
-        "Suite 440\n"
-        "Miami, Florida 33166\n"
-        "Phone Number: +1-786-264-0050\n"
-         "Office Hours: Mon-Fri, 8am - 5pm\n" 
-        "Email: miami@dgmflorida.com"
-    ), align="L")
-    pdf.ln(5)
-
     # Add invoice number and date
     pdf.set_font("Arial", style='B', size=10)
     pdf.set_text_color(0, 100, 0)  # Dark green
@@ -119,6 +106,22 @@ def generate_invoice(invoice_number, invoice_data):
         pdf.cell(40, 10, txt=str(record['total_length']), border=1, align="C")
         pdf.cell(20, 10, txt=str(record['Quantity']), border=1, align="C")
         pdf.ln()
+
+    pdf.set_font("Arial", style='B', size=12)
+    pdf.set_text_color(0, 0, 0) 
+    pdf.cell(200, 10, txt="Invoice Details", ln=True, align="L")
+    pdf.ln(5)
+    pdf.set_font("Arial", size=10)
+    pdf.set_text_color(0, 0, 0)  # Reset to black
+    pdf.multi_cell(0, 3, txt=(
+        "6705 NW 36th Street\n"
+        "Suite 440\n"
+        "Miami, Florida 33166\n"
+        "Phone Number: +1-786-264-0050\n"
+        "Office Hours: Mon-Fri, 8am - 5pm\n" 
+        "Email: miami@dgmflorida.com"
+    ), align="L")
+    pdf.ln(5)
 
     # Save the PDF and return it
     return pdf
