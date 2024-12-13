@@ -88,6 +88,18 @@ def generate_invoice(invoice_number, invoice_data):
     pdf.cell(200, 10, txt=f"Date: {current_date}", ln=True, align="L")
     pdf.ln(5)
 
+    # Add table title
+    pdf.set_font("Arial", style='B', size=12)
+    pdf.set_text_color(0, 100, 0)  # Dark green
+    pdf.cell(200, 10, txt="Invoice Details", ln=True, align="L")
+    pdf.ln(5)
+
+    # Add italic text
+    pdf.set_font("Arial", style='I', size=10)
+    pdf.set_text_color(0, 0, 0)  # Black
+    pdf.multi_cell(0, 8, txt="Below is a detailed list of items included in this invoice.", align="L")
+    pdf.ln(5)
+
     # Add table header with dark green background
     pdf.set_fill_color(0, 100, 0)  # Dark green
     pdf.set_text_color(255, 255, 255)  # White
