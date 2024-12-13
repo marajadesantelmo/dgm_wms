@@ -71,8 +71,7 @@ def generate_invoice(invoice_number, invoice_data):
     # Add invoice number and date
     pdf.set_font("Arial", style='B', size=10)
     pdf.set_text_color(0, 100, 0)  # Dark green
-    pdf.cell(200, 10, txt=f"Invoice Number: {invoice_number}", ln=True, align="L")
-    pdf.cell(200, 10, txt=f"Date: {current_date}", ln=True, align="L")
+    pdf.cell(200, 10, txt=f"Invoice Number: {invoice_number}                                                Date: {current_date}", ln=True, align="L")
     pdf.ln(5)
 
     # Add table title
@@ -109,7 +108,7 @@ def generate_invoice(invoice_number, invoice_data):
 
     pdf.set_font("Arial", style='B', size=12)
     pdf.set_text_color(0, 0, 0) 
-    pdf.cell(200, 10, txt="Invoice Details", ln=True, align="L")
+    pdf.cell(200, 3, txt="DGM - Florida", ln=True, align="L")
     pdf.ln(5)
     pdf.set_font("Arial", size=10)
     pdf.set_text_color(0, 0, 0)  # Reset to black
