@@ -76,7 +76,7 @@ def generate_invoice(invoice_number, invoice_data):
         "Suite 440\n"
         "Miami, Florida 33166\n"
         "Phone Number: +1-786-264-0050\n"
-        "Office Hours: Mon–Fri, 8am – 5pm\n"
+         "Office Hours: Mon-Fri, 8am - 5pm\n" 
         "Email: miami@dgmflorida.com"
     ), align="L")
     pdf.ln(5)
