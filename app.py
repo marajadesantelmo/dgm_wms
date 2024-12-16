@@ -16,7 +16,7 @@ with open("styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # Simple login system
-USER_CREDENTIALS = {"diego": "3333", "santiago": "1111"}
+USER_CREDENTIALS = {"Diego": "3333", "Santiago": "1111"}
 
 def login(username, password):
     if username in USER_CREDENTIALS and USER_CREDENTIALS[username] == password:
