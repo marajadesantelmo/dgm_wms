@@ -42,7 +42,7 @@ if not st.session_state.logged_in:
         else:
             st.error("Invalid username or password")
 else:
-    # Logged-in state
+    # Logged-in status
     st.sidebar.title(f"Welcome, {st.session_state.username}!")
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["Dashboard", "Record Inbound", "Record Outbound", "Add SKU"])
