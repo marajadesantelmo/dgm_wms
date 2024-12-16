@@ -16,7 +16,7 @@ with open("styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 # Logged-in state
-st.sidebar.title(f"Welcome, {st.session_state.username}!")
+#st.sidebar.title(f"Welcome, {st.session_state.username}!")
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Dashboard", "Record Inbound", "Record Outbound", "Add SKU"])
 
