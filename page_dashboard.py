@@ -12,7 +12,7 @@ def show_page_dashboard():
         st.title("DGM - Warehouse Management System")
         st.subheader("For HBG Supply LLC")
     with col2:
-        st.image("logo.png", use_column_width=True)   ## Cambiar a container_withd para pasarlo a cloud
+        st.image("logo.png", use_container_width=True)   ## Cambiar a container_withd para pasarlo a cloud
     st.markdown(
         """
         <hr style="border: 1px solid darkgreen; margin-top: 20px; margin-bottom: 20px;">
