@@ -1,9 +1,9 @@
 from supabase import create_client, Client
 import pandas as pd
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import os
-import ast
-load_dotenv()
+#import ast
+#load_dotenv()
 
 url_supabase = os.getenv("url_supabase")
 key_supabase= os.getenv("key_supabase")
