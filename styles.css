@@ -40,14 +40,14 @@
 /* Light mode styles */
 @media (prefers-color-scheme: light) {
     body {
-        background-color: #fdf6e3; /* Solarized Light base color */
+        background-color: #88dab1; /* Solarized Light base color */
         color: #657b83; /* Solarized Light text color */
     }
     h1, h2, h3, h4, h5, h6 {
         color: #586e75; /* Solarized Light heading color */
     }
     .stApp {
-        background-color: #fdf6e3; /* Solarized Light base color */
+        background-color: #a7f0b9; /* Solarized Light base color */
     }
 
     /* Table customization */
