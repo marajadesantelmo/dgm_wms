@@ -5,6 +5,7 @@ import page_dashboard
 import page_inbound
 import page_outbound
 import page_add_sku
+from io import BytesIO
 
 # Page configuration
 st.set_page_config(page_title="DGM - Warehouse Management System", 
@@ -29,6 +30,15 @@ if 'logged_in' not in st.session_state:
 if 'username' not in st.session_state:
     st.session_state.username = ""
 
+# Function to convert DataFrame to Excel
+def to_excel(df):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    df.to_excel(writer, index=False, sheet_name='Sheet1')
+    writer.save()
+    processed_data = output.getvalue()
+    return processed_data
+
 # Login form
 if not st.session_state.logged_in:
     st.title("Login")
@@ -49,13 +59,22 @@ else:
 
     # Load the selected page
     if page == "Dashboard":
-        page_dashboard.show_page_dashboard()
+        df = page_dashboard.show_page_dashboard()
     elif page == "Record Inbound":
-        page_inbound.show_page_inbound()
+        df = page_inbound.show_page_inbound()
     elif page == "Record Outbound":
-        page_outbound.show_page_outbound()
+        df = page_outbound.show_page_outbound()
     elif page == "Add SKU":
-        page_add_sku.show_page_add_sku()
+        df = page_add_sku.show_page_add_sku()
+
+    # Download button
+    if df is not None:
+        st.sidebar.download_button(
+            label="Download data as Excel",
+            data=to_excel(df),
+            file_name='data.xlsx',
+            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
 
     # Logout button
     if st.sidebar.button("Logout"):

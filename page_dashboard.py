@@ -44,5 +44,4 @@ def show_page_dashboard():
         st.subheader("Outbound from Stock")
         st.dataframe(outbound_table, hide_index=True)
     
-#    st.subheader("Clients")
-#    st.dataframe(clients, hide_index=True)
+    return current_stock
