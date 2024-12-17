@@ -81,7 +81,7 @@ else:
 
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M")
         st.sidebar.download_button(
-            label=f"Download as Excel ({current_time})",
+            label=f"Download as Excel",
             data=to_excel_multiple_sheets(current_stock, inbound_table, outbound_table),
             file_name=f'DGM_Warehouse_Report_{current_time}.xlsx',
             mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
