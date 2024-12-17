@@ -59,7 +59,7 @@ else:
 
     # Load the selected page
     if page == "Dashboard":
-        df = page_dashboard.show_page_dashboard()
+        current_stock, inbound_table, outbound_table = page_dashboard.show_page_dashboard()
     elif page == "Record Inbound":
         df = page_inbound.show_page_inbound()
     elif page == "Record Outbound":
@@ -68,11 +68,22 @@ else:
         df = page_add_sku.show_page_add_sku()
 
     # Download button
-    if df is not None:
+    if page == "Dashboard" and current_stock is not None and inbound_table is not None and outbound_table is not None:
+        def to_excel_multiple_sheets(current_stock, inbound_table, outbound_table):
+            output = BytesIO()
+            writer = pd.ExcelWriter(output, engine='xlsxwriter')
+            current_stock.to_excel(writer, index=False, sheet_name='Current Stock')
+            inbound_table.to_excel(writer, index=False, sheet_name='Inbound Records')
+            outbound_table.to_excel(writer, index=False, sheet_name='Outbound Records')
+            writer.close()
+            processed_data = output.getvalue()
+            return processed_data
+
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M")
         st.sidebar.download_button(
-            label="Download data as Excel",
-            data=to_excel(df),
-            file_name='data.xlsx',
+            label=f"Download as Excel ({current_time})",
+            data=to_excel_multiple_sheets(current_stock, inbound_table, outbound_table),
+            file_name=f'DGM_Warehouse_Report_{current_time}.xlsx',
             mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
 
