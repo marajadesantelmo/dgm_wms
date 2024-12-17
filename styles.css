@@ -34,3 +34,61 @@ h1, h2, h3, h4, h5, h6 {
 .dataframe td, .dataframe th {
     padding: 0.1rem;
 }
+
+/* Solarized Dark background and text colors with a dark green touch */
+body.dark-mode {
+    background-color: #002b36; /* Solarized Dark base color */
+    color: #839496; /* Solarized Dark text color */
+}
+h1.dark-mode, h2.dark-mode, h3.dark-mode, h4.dark-mode, h5.dark-mode, h6.dark-mode {
+    color: #93a1a1; /* Solarized Dark heading color */
+}
+.stApp.dark-mode {
+    background-color: #002b36; /* Solarized Dark base color */
+}
+
+/* Table customization */
+.dataframe.dark-mode {
+    background-color: #073642; /* Dark green touch */
+    color: #839496; /* Solarized Dark text color */
+}
+.dataframe table.dark-mode {
+    background-color: #073642; /* Dark green touch */
+}
+.dataframe th.dark-mode {
+    background-color: #586e75; /* Dark green touch */
+    color: #839496; /* Solarized Dark text color */
+}
+.dataframe td.dark-mode {
+    background-color: #073642; /* Dark green touch */
+    color: #839496; /* Solarized Dark text color */
+}
+
+/* Light mode styles */
+body.light-mode {
+    background-color: #fdf6e3; /* Solarized Light base color */
+    color: #657b83; /* Solarized Light text color */
+}
+h1.light-mode, h2.light-mode, h3.light-mode, h4.light-mode, h5.light-mode, h6.light-mode {
+    color: #586e75; /* Solarized Light heading color */
+}
+.stApp.light-mode {
+    background-color: #fdf6e3; /* Solarized Light base color */
+}
+
+/* Table customization */
+.dataframe.light-mode {
+    background-color: #eee8d5; /* Light green touch */
+    color: #657b83; /* Solarized Light text color */
+}
+.dataframe table.light-mode {
+    background-color: #eee8d5; /* Light green touch */
+}
+.dataframe th.light-mode {
+    background-color: #93a1a1; /* Light green touch */
+    color: #657b83; /* Solarized Light text color */
+}
+.dataframe td.light-mode {
+    background-color: #eee8d5; /* Light green touch */
+    color: #657b83; /* Solarized Light text color */
+}
