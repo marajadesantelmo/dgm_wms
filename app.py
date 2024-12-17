@@ -28,16 +28,6 @@ if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'username' not in st.session_state:
     st.session_state.username = ""
-if 'theme' not in st.session_state:
-    st.session_state.theme = "dark-mode"
-
-# Theme toggle
-def toggle_theme():
-    st.session_state.theme = "light-mode" if st.session_state.theme == "dark-mode" else "dark-mode"
-
-# Apply theme
-st.markdown(f'<style>body {{ background-color: inherit; }}</style>', unsafe_allow_html=True)
-st.markdown(f'<div class="{st.session_state.theme}">', unsafe_allow_html=True)
 
 # Login form
 if not st.session_state.logged_in:
@@ -56,11 +46,6 @@ else:
     st.sidebar.title(f"Welcome, {st.session_state.username}!")
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["Dashboard", "Record Inbound", "Record Outbound", "Add SKU"])
-
-    # Theme toggle button
-    if st.sidebar.button("Toggle Theme"):
-        toggle_theme()
-        st.rerun()
 
     # Load the selected page
     if page == "Dashboard":
