@@ -1,10 +1,10 @@
 /* Solarized Dark background and text colors with a dark green touch */
 body {
-    background-color: #002b36; /* Solarized Dark base color */
+    background-color: #014a5c; /* Solarized Dark base color */
     color: #839496; /* Solarized Dark text color */
 }
 h1, h2, h3, h4, h5, h6 {
-    color: #93a1a1; /* Solarized Dark heading color */
+    color: #5b6666; /* Solarized Dark heading color */
 }
 .stApp {
     background-color: #002b36; /* Solarized Dark base color */
