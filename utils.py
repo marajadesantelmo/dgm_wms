@@ -38,7 +38,7 @@ def current_stock_table(stock, skus):
     current_stock = stock.merge(skus, on = 'sku_id')
     #current_stock.rename(columns={'Name': 'Client Name'}, inplace=True)
     current_stock['Total Length'] = current_stock['Quantity'] * current_stock['Length']
-    current_stock = current_stock[['SKU', 'Length', 'Quantity', 'Total Length']]
+    current_stock = current_stock[['SKU', 'Quantity', 'Total Length']]
     return current_stock
 
 def generate_inbound_table(inbound, skus):
