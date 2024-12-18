@@ -20,9 +20,6 @@ with open("styles.css") as f:
 USERNAMES = os.getenv("USERNAMES")
 PASSWORDS = os.getenv("PASSWORDS")
 
-# Simple login system
-USER_CREDENTIALS = {"Diego": "3333", "Santiago": "1111"}
-
 def login(username, password):
     if username in USERNAMES and password in PASSWORDS:
         return True
