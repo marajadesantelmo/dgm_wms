@@ -6,6 +6,7 @@ import page_inbound
 import page_outbound
 import page_add_sku
 from io import BytesIO
+import os
 
 # Page configuration
 st.set_page_config(page_title="DGM - Warehouse Management System", 
@@ -16,11 +17,14 @@ st.set_page_config(page_title="DGM - Warehouse Management System",
 with open("styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
+USERNAMES = os.getenv("USERNAMES")
+PASSWORDS = os.getenv("PASSWORDS")
+
 # Simple login system
 USER_CREDENTIALS = {"Diego": "3333", "Santiago": "1111"}
 
 def login(username, password):
-    if username in USER_CREDENTIALS and USER_CREDENTIALS[username] == password:
+    if username in USERNAMES and password in PASSWORDS:
         return True
     return False
 
