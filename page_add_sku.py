@@ -12,17 +12,23 @@ def show_page_add_sku():
     with col1:
         st.subheader("Insert new SKU")
         with st.form("add_sku_form"):
+            origin = st.selectbox("Origin", ["China", "Saudi"])
             schedule = st.number_input("Schedule", min_value=0)
             size = st.text_input("Size")
             length = st.number_input("Length", min_value=0)
             submitted = st.form_submit_button("Add SKU")
             if submitted:
                 if schedule and size and length:
-                    sku = f"sch{schedule} - {size} - {length}ft"
                     id = get_next_sku_id()
+                    if origin == "China":
+                        origin = "CN"
+                    elif origin == "Saudi":
+                        origin = "SA"
+                    sku = f"{origin} - sch{schedule} - {size} - {length}ft"
                     # Add SKU to the database
                     supabase_client.from_('skus').insert([
                         {'sku_id': int(id),
+                        'Origin': origin,
                         'SKU': sku, 
                         'Length': length, 
                         'Schedule': schedule, 
