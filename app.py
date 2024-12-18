@@ -61,11 +61,11 @@ else:
     if page == "Dashboard":
         current_stock, inbound_table, outbound_table = page_dashboard.show_page_dashboard()
     elif page == "Record Inbound":
-        df = page_inbound.show_page_inbound()
+        page_inbound.show_page_inbound()
     elif page == "Record Outbound":
-        df = page_outbound.show_page_outbound()
+        page_outbound.show_page_outbound()
     elif page == "Add SKU":
-        df = page_add_sku.show_page_add_sku()
+        page_add_sku.show_page_add_sku()
 
     # Download button
     if page == "Dashboard" and current_stock is not None and inbound_table is not None and outbound_table is not None:

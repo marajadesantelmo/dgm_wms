@@ -45,12 +45,14 @@ def generate_inbound_table(inbound, skus):
     inbound = inbound.merge(skus, on = 'sku_id')
     inbound['Total Length'] = inbound['Quantity'] * inbound['Length']
     inbound = inbound[['Date', 'Container', 'SKU', 'Quantity', 'Total Length']]
+    inbound = inbound.sort_values(by='Date', ascending=False)
     return inbound
 
 def generate_outbound_table(outbound, skus):
     outbound = outbound.merge(skus, on = 'sku_id')
     outbound['Total Length'] = outbound['Quantity'] * outbound['Length']
     outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length']]
+    outbound = outbound.sort_values(by='Date', ascending=False)
     return outbound
 
 def generate_invoice(invoice_number, invoice_data):
