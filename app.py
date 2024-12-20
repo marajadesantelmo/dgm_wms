@@ -21,9 +21,8 @@ with open("styles.css") as f:
 # Initialize the cookie controller
 controller = CookieController()
 
-# Environment variables for login credentials
-USERNAMES = os.getenv("USERNAMES").split(",") if os.getenv("USERNAMES") else []
-PASSWORDS = os.getenv("PASSWORDS").split(",") if os.getenv("PASSWORDS") else []
+USERNAMES = ["Diego", "Santiago"]
+PASSWORDS = ["3333", "1111"]
 
 def login(username, password):
     if username in USERNAMES and password in PASSWORDS:
