@@ -98,8 +98,3 @@ else:
             mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
 
-    # Logout button
-    if st.sidebar.button("Logout", key="logout2"):
-        st.session_state.logged_in = False
-        st.session_state.username = ""
-        st.rerun()  # Rerun the script to go back to the login page
