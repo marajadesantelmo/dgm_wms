@@ -52,7 +52,7 @@ if not logged_in_cookie:
             # Set cookies to manage login state
             controller.set("logged_in", True)
             controller.set("username", username)
-            st.experimental_rerun()
+            st.rerun()
         else:
             st.error("Invalid username or password")
 else:
@@ -66,7 +66,7 @@ else:
     if st.sidebar.button("Logout"):
         controller.remove("logged_in")
         controller.remove("username")
-        st.experimental_rerun()
+        st.rerun()
 
     # Load the selected page
     if page == "Dashboard":
