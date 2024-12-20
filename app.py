@@ -63,7 +63,7 @@ else:
     page = st.sidebar.radio("Go to", ["Dashboard", "Record Inbound", "Record Outbound", "Add SKU"])
     
     # Logout button
-    if st.sidebar.button("Logout"):
+    if st.sidebar.button("Logout", key="logout1"):
         controller.remove("logged_in")
         controller.remove("username")
         st.rerun()
@@ -99,7 +99,7 @@ else:
         )
 
     # Logout button
-    if st.sidebar.button("Logout"):
+    if st.sidebar.button("Logout", key="logout2"):
         st.session_state.logged_in = False
         st.session_state.username = ""
         st.rerun()  # Rerun the script to go back to the login page
