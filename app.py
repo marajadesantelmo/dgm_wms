@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+from streamlit_cookies_controller import CookieController
 import page_dashboard
 import page_inbound
 import page_outbound
@@ -13,23 +14,21 @@ st.set_page_config(page_title="DGM - Warehouse Management System",
                    page_icon="📊", 
                    layout="wide")
 
-# Estilo
+# Style
 with open("styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-USERNAMES = os.getenv("USERNAMES")
-PASSWORDS = os.getenv("PASSWORDS")
+# Initialize the cookie controller
+controller = CookieController()
+
+# Environment variables for login credentials
+USERNAMES = os.getenv("USERNAMES").split(",") if os.getenv("USERNAMES") else []
+PASSWORDS = os.getenv("PASSWORDS").split(",") if os.getenv("PASSWORDS") else []
 
 def login(username, password):
     if username in USERNAMES and password in PASSWORDS:
         return True
     return False
-
-# Initialize session state
-if 'logged_in' not in st.session_state:
-    st.session_state.logged_in = False
-if 'username' not in st.session_state:
-    st.session_state.username = ""
 
 # Function to convert DataFrame to Excel
 def to_excel(df):
@@ -40,23 +39,35 @@ def to_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
-# Login form
-if not st.session_state.logged_in:
+# Check if user is logged in via cookies
+logged_in_cookie = controller.get("logged_in")
+username_cookie = controller.get("username")
+
+if not logged_in_cookie:
+    # Login form
     st.title("Login")
     username = st.text_input("Username")
     password = st.text_input("Password", type="password")
     if st.button("Login"):
         if login(username, password):
-            st.session_state.logged_in = True
-            st.session_state.username = username
-            st.rerun()  # Rerun the script to go to the logged-in state
+            # Set cookies to manage login state
+            controller.set("logged_in", True)
+            controller.set("username", username)
+            st.experimental_rerun()
         else:
             st.error("Invalid username or password")
 else:
-    # Logged-in status
-    st.sidebar.title(f"Welcome, {st.session_state.username}!")
+    # User is logged in, show the main app
+    username = username_cookie
+    st.sidebar.title(f"Welcome, {username}!")
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to", ["Dashboard", "Record Inbound", "Record Outbound", "Add SKU"])
+    
+    # Logout button
+    if st.sidebar.button("Logout"):
+        controller.remove("logged_in")
+        controller.remove("username")
+        st.experimental_rerun()
 
     # Load the selected page
     if page == "Dashboard":
