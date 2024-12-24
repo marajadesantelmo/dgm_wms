@@ -75,3 +75,8 @@
         padding: 0.1rem;
     }
 }
+
+/* Smaller font for metrics */
+.metric {
+    font-size: 0.8rem;
+}
