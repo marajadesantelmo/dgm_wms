@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
-from utils import get_next_outbound_id, generate_outbound_table, current_stock_table, generate_invoice, validate_outbound_status
+from utils import get_next_outbound_id, generate_outbound_table, current_stock_table, generate_invoice
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -151,5 +151,10 @@ def show_page_outbound():
     else:
         outbound_id = st.text_input("Or enter Invoice Number manually")
     if st.button("Validate Outbound"):
-        validate_outbound_status(outbound_id, "Validated")
-        st.success(f"Outbound {outbound_id} has been validated.")
+        if outbound_id:
+            outbound_validation_response = supabase_client.from_("outbound").update({
+                "Status": "Validated"}).match({"Invoice Number": outbound_id}).execute()
+        if outbound_validation_response.data:
+            st.success(f"Outbound {outbound_id} has been validated.")
+        else:
+            st.error(f"Failed to validate outbound {outbound_id}.")
