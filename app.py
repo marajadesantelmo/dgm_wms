@@ -38,6 +38,11 @@ def to_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
+# Function to update the status of an outbound record
+def update_outbound_status(outbound_id, status):
+    # Assuming you have a function to update the status in your database
+    page_outbound.update_status(outbound_id, status)
+
 # Check if user is logged in via cookies
 logged_in_cookie = controller.get("logged_in")
 username_cookie = controller.get("username")
@@ -75,6 +80,12 @@ else:
         page_inbound.show_page_inbound()
     elif page == "Record Outbound":
         page_outbound.show_page_outbound()
+        # Add a section to validate outbound records
+        st.subheader("Validate Outbound Records")
+        outbound_id = st.text_input("Outbound ID")
+        if st.button("Validate Outbound"):
+            update_outbound_status(outbound_id, "Validated")
+            st.success(f"Outbound {outbound_id} has been validated.")
     elif page == "Add SKU":
         page_add_sku.show_page_add_sku()
 
