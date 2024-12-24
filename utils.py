@@ -52,9 +52,10 @@ def generate_inbound_table(inbound, skus):
 def generate_outbound_table(outbound, skus):
     outbound = outbound.merge(skus, on = 'sku_id')
     outbound['Total Length'] = outbound['Quantity'] * outbound['Length']
-    outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length']]
+    outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length', 'Status']]
     outbound = outbound.sort_values(by='Date', ascending=False)
     return outbound
+   
 
 def generate_invoice(invoice_number, invoice_data):
     current_date = datetime.now().strftime("%Y-%m-%d")

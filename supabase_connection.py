@@ -5,6 +5,7 @@ import os
 #import ast
 #load_dotenv()
 
+#De aca agarra las keys streamlit. En caso de correr manual no correr estos comandos
 url_supabase = os.getenv("url_supabase")
 key_supabase= os.getenv("key_supabase")
 

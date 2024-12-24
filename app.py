@@ -80,12 +80,6 @@ else:
         page_inbound.show_page_inbound()
     elif page == "Record Outbound":
         page_outbound.show_page_outbound()
-        # Add a section to validate outbound records
-        st.subheader("Validate Outbound Records")
-        outbound_id = st.text_input("Outbound ID")
-        if st.button("Validate Outbound"):
-            update_outbound_status(outbound_id, "Validated")
-            st.success(f"Outbound {outbound_id} has been validated.")
     elif page == "Add SKU":
         page_add_sku.show_page_add_sku()
 

@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
-from utils import get_next_outbound_id, generate_outbound_table, current_stock_table, generate_invoice
+from utils import get_next_outbound_id, generate_outbound_table, current_stock_table, generate_invoice, validate_outbound_status
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -140,3 +140,16 @@ def show_page_outbound():
         # Display current stock
         st.subheader("Current Stock")
         st.dataframe(current_stock, hide_index=True)
+    
+    # Invoice validation
+    st.subheader("Validate Outbound Records")
+    outbound_id = st.text_input("Outbound ID")
+    invoice_numbers = [""] + outbound_table['Invoice Number'].astype(str).tolist()
+    selected_invoice = st.selectbox("Select Invoice Number", invoice_numbers)
+    if selected_invoice:
+        outbound_id = selected_invoice
+    else:
+        outbound_id = st.text_input("Or enter Invoice Number manually")
+    if st.button("Validate Outbound"):
+        validate_outbound_status(outbound_id, "Validated")
+        st.success(f"Outbound {outbound_id} has been validated.")

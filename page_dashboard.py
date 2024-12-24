@@ -34,7 +34,9 @@ def show_page_dashboard():
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.subheader("Current Stock")
+        st.subheader("Current Stock") 
+        total_feet = current_stock['Total Length'].sum()
+        st.metric(label="Total Feet", value=f"{total_feet:.2f}")
         st.dataframe(current_stock, hide_index=True)
 
     with col2:
