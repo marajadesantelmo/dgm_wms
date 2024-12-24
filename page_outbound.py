@@ -143,8 +143,7 @@ def show_page_outbound():
     
     # Invoice validation
     st.subheader("Validate Outbound Records")
-    outbound_id = st.text_input("Outbound ID")
-    invoice_numbers = [""] + outbound_table['Invoice Number'].astype(str).tolist()
+    invoice_numbers = [""] + outbound_table['Invoice Number'].fillna(0).astype(int).tolist()
     selected_invoice = st.selectbox("Select Invoice Number", invoice_numbers)
     if selected_invoice:
         outbound_id = selected_invoice
