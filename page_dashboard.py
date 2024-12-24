@@ -39,7 +39,7 @@ def show_page_dashboard():
         st.markdown(f"""
         <div class="custom-metric">
         <strong>Total Feets</strong>  
-        {total_feet:.0f}
+        {total_feet:,.0f}
         </div>
         """, unsafe_allow_html=True)
         st.dataframe(current_stock, hide_index=True)
