@@ -77,11 +77,9 @@
 }
 
 .custom-metric {
-    font-size: 16px; /* Adjust font size */
-    color: darkgreen; /* Set text color */
-    font-family: Arial, sans-serif; /* Change font family */
-    text-align: center; /* Center the text */
-    border: 1px solid #ddd; /* Optional: border */
-    border-radius: 5px; /* Optional: rounded corners */
-    padding: 5px; /* Optional: spacing inside the box */
+    font-size: 16px; 
+    color: darkgreen; 
+    font-family: Arial, sans-serif; 
+    text-align: left; 
+    padding: 5px; 
 }
