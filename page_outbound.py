@@ -137,6 +137,7 @@ def show_page_outbound():
         st.subheader("Current Stock")
         st.dataframe(current_stock, hide_index=True)
         st.subheader("Validate Outbound Order")
+        outbound_table_pending = outbound_table.loc[outbound_table['Status'] != 'Validated']
         invoice_numbers = [""] + outbound_table['Invoice Number'].fillna(0).astype(int).tolist()
         selected_invoice = st.selectbox("Select Invoice Number", invoice_numbers)
         if selected_invoice:
