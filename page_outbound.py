@@ -120,6 +120,11 @@ def show_page_outbound():
                         st.session_state.invoice = invoice
                     else:
                         st.warning("No valid items selected or lengths exceed available stock.")
+                    # Reload the current stock and outbound tables
+                    stock = fetch_table_data('stock')
+                    current_stock = current_stock_table(stock, skus)
+                    outbount = fetch_table_data('outbound')
+                    outbound_table = generate_outbound_table(outbount, skus)
 
         if 'pdf_output' in st.session_state and 'invoice' in st.session_state:
             st.download_button(
@@ -142,6 +147,11 @@ def show_page_outbound():
                     "Status": "Validated"}).match({"Invoice Number": outbound_id}).execute()
             if outbound_validation_response.data:
                 st.success(f"Outbound {outbound_id} has been validated.")
+                # Reload the current stock and outbound tables
+                stock = fetch_table_data('stock')
+                current_stock = current_stock_table(stock, skus)
+                outbount = fetch_table_data('outbound')
+                outbound_table = generate_outbound_table(outbount, skus)
                 if 'pdf_output' in st.session_state and 'invoice' in st.session_state:
                     st.download_button(
                         label="Download Invoice",
