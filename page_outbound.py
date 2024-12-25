@@ -7,7 +7,7 @@ from utils import get_next_outbound_id, generate_outbound_table, current_stock_t
 current_date = datetime.now().strftime("%Y-%m-%d")
 
 def show_page_outbound():
-    st.title("Record Outbound")
+    st.title("Record Outbound Order")
 
     # Fetch and prepare data
     #clients = fetch_table_data('clients')
@@ -131,13 +131,11 @@ def show_page_outbound():
     with col2: 
         st.subheader("Current Stock")
         st.dataframe(current_stock, hide_index=True)
-        st.subheader("Validate Outbound Records")
+        st.subheader("Validate Outbound Order")
         invoice_numbers = [""] + outbound_table['Invoice Number'].fillna(0).astype(int).tolist()
         selected_invoice = st.selectbox("Select Invoice Number", invoice_numbers)
         if selected_invoice:
             outbound_id = selected_invoice
-        else:
-            outbound_id = st.text_input("Or enter Invoice Number manually")
         if st.button("Validate Outbound"):
             if outbound_id:
                 outbound_validation_response = supabase_client.from_("outbound").update({
