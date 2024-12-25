@@ -152,6 +152,7 @@ def show_page_outbound():
                 current_stock = current_stock_table(stock, skus)
                 outbount = fetch_table_data('outbound')
                 outbound_table = generate_outbound_table(outbount, skus)
+                invoice_data = fetch_table_data('outbound').loc[fetch_table_data('outbound')['Invoice Number'] == outbound_id].to_dict('records')
                 pdf = generate_invoice(invoice, invoice_data)
                 pdf_output = pdf.output(dest='S').encode('latin1')
                 st.session_state.pdf_output = pdf_output
