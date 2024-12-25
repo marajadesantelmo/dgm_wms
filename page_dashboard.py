@@ -52,7 +52,7 @@ def show_page_dashboard():
         st.subheader("Inbound per day in feets")
         inbound_table['Date'] = pd.to_datetime(inbound_table['Date'])
         inbound_chart_data = inbound_table.groupby(inbound_table['Date'].dt.date)['Total Length'].sum().reset_index()
-        fig = px.bar(inbound_chart_data, x='Date', y='Feets', title='Inbound Feet per Day')
+        fig = px.bar(inbound_chart_data, x='Date', y='Total Length', title='Inbound Feet per Day')
         fig.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
@@ -67,7 +67,7 @@ def show_page_dashboard():
         st.subheader("Inbound per day in feets")
         outbound_table['Date'] = pd.to_datetime(outbound_table['Date'])
         outbound_chart_data = outbound_table.groupby(outbound_table['Date'].dt.date)['Total Length'].sum().reset_index()
-        fig = px.bar(outbound_chart_data, x='Date', y='Feets', title='Outbound Feet per Day')
+        fig = px.bar(outbound_chart_data, x='Date', y='Total Length', title='Outbound Feet per Day')
         fig.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
