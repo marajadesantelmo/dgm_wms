@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from supabase_connection import fetch_table_data, supabase_client
 from datetime import datetime
-from utils import get_next_outbound_id, generate_outbound_table, current_stock_table, generate_invoice
+from utils import get_next_outbound_id, generate_outbound_table, current_stock_table, generate_invoice, generate_invoice_outbound_order
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -108,16 +108,13 @@ def show_page_outbound():
                     for record in outbound_data:
                         record['id'] = int(outbound_id)
                         outbound_response = supabase_client.from_("outbound").insert([record]).execute()
-
                         if outbound_response.data:
                             st.success(f"Outbound record for Invoice {invoice} created successfully!")
                         else:
                             st.error(f"Failed to create outbound record for SKU {record['sku_id']}.")
-
-                    pdf = generate_invoice(invoice, invoice_data)
+                    #Generate invoice for outbound order
+                    pdf = generate_invoice_outbound_order(invoice, invoice_data)
                     pdf_output = pdf.output(dest='S').encode('latin1')
-                    
-                    # Store the PDF output in session state
                     st.session_state.pdf_output = pdf_output
                     st.session_state.invoice = invoice
                 else:
@@ -125,7 +122,7 @@ def show_page_outbound():
 
     if 'pdf_output' in st.session_state and 'invoice' in st.session_state:
         st.download_button(
-            label="Download Invoice",
+            label="Download Outbound Order",
             data=st.session_state.pdf_output,
             file_name=f"invoice_{st.session_state.invoice}.pdf",
             mime="application/pdf"
@@ -155,5 +152,11 @@ def show_page_outbound():
                 "Status": "Validated"}).match({"Invoice Number": outbound_id}).execute()
         if outbound_validation_response.data:
             st.success(f"Outbound {outbound_id} has been validated.")
+            if 'pdf_output' in st.session_state and 'invoice' in st.session_state:
+                st.download_button(
+                    label="Download Invoice",
+                    data=st.session_state.pdf_output,
+                    file_name=f"invoice_{st.session_state.invoice}.pdf",
+                    mime="application/pdf")
         else:
             st.error(f"Failed to validate outbound {outbound_id}.")
