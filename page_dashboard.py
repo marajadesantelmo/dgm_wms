@@ -3,7 +3,7 @@ import pandas as pd
 from supabase_connection import supabase_client, fetch_table_data
 from utils import current_stock_table, generate_inbound_table, generate_outbound_table
 from datetime import datetime
-import matplotlib.pyplot as plt
+import plotly.express as px
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -50,23 +50,29 @@ def show_page_dashboard():
         st.dataframe(inbound_table, hide_index=True)
         # Add inbound chart
         st.subheader("Inbound Chart")
-        fig, ax = plt.subplots()
-        inbound_table.groupby('SKU')['Quantity'].sum().plot(kind='bar', ax=ax)
-        ax.set_title('Inbound Quantities by SKU')
-        ax.set_xlabel('SKU')
-        ax.set_ylabel('Quantity')
-        st.pyplot(fig)
+        inbound_table['Date'] = pd.to_datetime(inbound_table['Date'])
+        inbound_chart_data = inbound_table.groupby(inbound_table['Date'].dt.date)['Feet'].sum().reset_index()
+        fig = px.bar(inbound_chart_data, x='Date', y='Feet', title='Inbound Feet per Day')
+        fig.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font_color='darkgreen'
+        )
+        st.plotly_chart(fig)
 
     with col3:
         st.subheader("Outbound from Stock")
         st.dataframe(outbound_table, hide_index=True)
         # Add outbound chart
         st.subheader("Outbound Chart")
-        fig, ax = plt.subplots()
-        outbound_table.groupby('SKU')['Quantity'].sum().plot(kind='bar', ax=ax)
-        ax.set_title('Outbound Quantities by SKU')
-        ax.set_xlabel('SKU')
-        ax.set_ylabel('Quantity')
-        st.pyplot(fig)
+        outbound_table['Date'] = pd.to_datetime(outbound_table['Date'])
+        outbound_chart_data = outbound_table.groupby(outbound_table['Date'].dt.date)['Feet'].sum().reset_index()
+        fig = px.bar(outbound_chart_data, x='Date', y='Feet', title='Outbound Feet per Day')
+        fig.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            font_color='darkgreen'
+        )
+        st.plotly_chart(fig)
     
     return current_stock, inbound_table, outbound_table
