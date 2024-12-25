@@ -23,16 +23,16 @@ def show_page_outbound():
         with st.form("record_outbound_form"):
             #client_name = st.selectbox("Client Name", clients['Name'])
             invoice = st.text_input("Invoice Number (please enter only numbers)")
-            col1, col2 = st.columns(2)
+            col1_1, col1_2 = st.columns(2)
             # Grouping SKUs by invoice number
-            with col1:
+            with col1_1:
                 # Selectbox for up to 10 SKUs, default value set to None or "" to prevent accidental selection
                 skus_selected = [
                     st.selectbox(f"{i+1}. SKU", [""] + skus['SKU'].tolist(), key=f"sku_{i}")
                     for i in range(10)
                 ]
 
-            with col2:
+            with col1_2:
                 # Number inputs for lengths of up to 10 items
                 lengths = [
                     st.number_input(f"Length item {i+1}", min_value=0, key=f"length_{i}")
