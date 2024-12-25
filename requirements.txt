@@ -4,3 +4,4 @@ supabase
 fpdf
 xlsxwriter
 streamlit_cookies_controller
+matplotlib.pyplot

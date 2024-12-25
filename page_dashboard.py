@@ -3,6 +3,7 @@ import pandas as pd
 from supabase_connection import supabase_client, fetch_table_data
 from utils import current_stock_table, generate_inbound_table, generate_outbound_table
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -47,8 +48,25 @@ def show_page_dashboard():
     with col2:
         st.subheader("Inbound to Stock")
         st.dataframe(inbound_table, hide_index=True)
+        # Add inbound chart
+        st.subheader("Inbound Chart")
+        fig, ax = plt.subplots()
+        inbound_table.groupby('SKU')['Quantity'].sum().plot(kind='bar', ax=ax)
+        ax.set_title('Inbound Quantities by SKU')
+        ax.set_xlabel('SKU')
+        ax.set_ylabel('Quantity')
+        st.pyplot(fig)
+
     with col3:
         st.subheader("Outbound from Stock")
         st.dataframe(outbound_table, hide_index=True)
+        # Add outbound chart
+        st.subheader("Outbound Chart")
+        fig, ax = plt.subplots()
+        outbound_table.groupby('SKU')['Quantity'].sum().plot(kind='bar', ax=ax)
+        ax.set_title('Outbound Quantities by SKU')
+        ax.set_xlabel('SKU')
+        ax.set_ylabel('Quantity')
+        st.pyplot(fig)
     
     return current_stock, inbound_table, outbound_table
