@@ -77,6 +77,9 @@ def show_page_inbound():
                 if inbound_data:
                     supabase_client.from_("inbound").insert(inbound_data).execute()
                     st.success("Inbound records added successfully!")
+                    # Reload the inbound table
+                    inbound = fetch_table_data('inbound')
+                    inbound_table = generate_inbound_table(inbound, skus)
                 else:
                     st.warning("No valid items were selected.")
 
