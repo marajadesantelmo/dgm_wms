@@ -130,7 +130,7 @@ def show_page_outbound():
             st.download_button(
                 label="Download Outbound Order",
                 data=st.session_state.pdf_output,
-                file_name=f"invoice_{st.session_state.invoice}.pdf",
+                file_name=f"DGM_Outbound_Order_{st.session_state.invoice}.pdf",
                 mime="application/pdf"
             )
     with col2: 
@@ -152,11 +152,15 @@ def show_page_outbound():
                 current_stock = current_stock_table(stock, skus)
                 outbount = fetch_table_data('outbound')
                 outbound_table = generate_outbound_table(outbount, skus)
+                pdf = generate_invoice(invoice, invoice_data)
+                pdf_output = pdf.output(dest='S').encode('latin1')
+                st.session_state.pdf_output = pdf_output
+                st.session_state.invoice = invoice
                 if 'pdf_output' in st.session_state and 'invoice' in st.session_state:
                     st.download_button(
                         label="Download Invoice",
                         data=st.session_state.pdf_output,
-                        file_name=f"invoice_{st.session_state.invoice}.pdf",
+                        file_name=f"DGM_Outbound_Invoice_{st.session_state.invoice}.pdf",
                         mime="application/pdf")
             else:
                 st.error(f"Failed to validate outbound {outbound_id}.")
