@@ -14,7 +14,7 @@ def show_page_inbound():
     inbound_table = generate_inbound_table(inbound, skus)
 
     st.title("Record Inbound")
-    col1, col2, col3 = st.columns(3)
+    col1, col3 = st.columns([2, 1])
     
     with col1:
         with st.form("add_stock_form"):
