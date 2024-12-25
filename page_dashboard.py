@@ -49,10 +49,10 @@ def show_page_dashboard():
         st.subheader("Inbound to Stock")
         st.dataframe(inbound_table, hide_index=True)
         # Add inbound chart
-        st.subheader("Inbound Chart")
+        st.subheader("Inbound per day in feets")
         inbound_table['Date'] = pd.to_datetime(inbound_table['Date'])
-        inbound_chart_data = inbound_table.groupby(inbound_table['Date'].dt.date)['Feet'].sum().reset_index()
-        fig = px.bar(inbound_chart_data, x='Date', y='Feet', title='Inbound Feet per Day')
+        inbound_chart_data = inbound_table.groupby(inbound_table['Date'].dt.date)['Total Length'].sum().reset_index()
+        fig = px.bar(inbound_chart_data, x='Date', y='Feets', title='Inbound Feet per Day')
         fig.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
@@ -64,10 +64,10 @@ def show_page_dashboard():
         st.subheader("Outbound from Stock")
         st.dataframe(outbound_table, hide_index=True)
         # Add outbound chart
-        st.subheader("Outbound Chart")
+        st.subheader("Inbound per day in feets")
         outbound_table['Date'] = pd.to_datetime(outbound_table['Date'])
-        outbound_chart_data = outbound_table.groupby(outbound_table['Date'].dt.date)['Feet'].sum().reset_index()
-        fig = px.bar(outbound_chart_data, x='Date', y='Feet', title='Outbound Feet per Day')
+        outbound_chart_data = outbound_table.groupby(outbound_table['Date'].dt.date)['Total Length'].sum().reset_index()
+        fig = px.bar(outbound_chart_data, x='Date', y='Feets', title='Outbound Feet per Day')
         fig.update_layout(
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
