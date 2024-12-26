@@ -79,8 +79,9 @@ def show_page_outbound():
                                         "sku_id": sku_id,
                                         "client_id": client_id
                                     }).execute()
-
+                                    
                                     if update_response.data:
+                                        # Store data for outbound record
                                         outbound_data.append({
                                             'sku_id': sku_id,
                                             'client_id': client_id,
@@ -89,7 +90,7 @@ def show_page_outbound():
                                             'Invoice Number': invoice, 
                                             'Status': 'Pending'
                                         })
-
+                                        # Store data for invoice
                                         invoice_data.append({
                                             'sku_id': sku_id,
                                             'SKU': skus_selected[i],
@@ -104,7 +105,6 @@ def show_page_outbound():
                     
                     # Insert outbound records in batch if there are valid items
                     if outbound_data:
-                        outbound_id = get_next_outbound_id()
                         for record in outbound_data:
                             outbound_response = supabase_client.from_("outbound").insert([record]).execute()
                             if outbound_response.data:
