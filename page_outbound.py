@@ -87,8 +87,7 @@ def show_page_outbound():
                                             'client_id': client_id,
                                             'Date': current_date,
                                             'Quantity': quantity,
-                                            'Invoice Number': invoice, 
-                                            'Status': 'Pending'
+                                            'Invoice Number': invoice
                                         })
                                         # Store data for invoice
                                         invoice_data.append({
