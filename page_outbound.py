@@ -153,8 +153,15 @@ def show_page_outbound():
                 current_stock = current_stock_table(stock, skus)
                 outbount = fetch_table_data('outbound')
                 outbound_table = generate_outbound_table(outbount, skus)
-                invoice_data = fetch_table_data('outbound').loc[fetch_table_data('outbound')['Invoice Number'] == outbound_id].to_dict('records')
-                pdf = generate_invoice(invoice, invoice_data)
+                invoice_data = [{
+                    "sku_id": record["sku_id"],
+                    "SKU": f"SKU-{record['sku_id']}",  # Example SKU mapping
+                    "Quantity": record["Quantity"],
+                    "total_length": record["Quantity"] * 5,  # Example calculation
+                    "Invoice Number": record["Invoice Number"]
+                } for record in outbound_validation_response.data]
+                
+                pdf = generate_invoice(outbound_id, invoice_data)
                 pdf_output = pdf.output(dest='S').encode('latin1')
                 st.session_state.pdf_output = pdf_output
                 st.session_state.invoice = invoice
