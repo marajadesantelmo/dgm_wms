@@ -135,7 +135,7 @@ def show_page_outbound():
             )
     with col2: 
         st.subheader("Current Stock")
-        st.dataframe(current_stock, hide_index=True)
+        st.dataframe(current_stock, hide_index=True, width=col2.width)
         st.subheader("Validate Outbound Order")
         outbound_table_pending = outbound_table.loc[outbound_table['Status'] != 'Validated']
         invoice_numbers = [""] + outbound_table_pending['Invoice Number'].fillna(0).astype(int).unique().tolist()
