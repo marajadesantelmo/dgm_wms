@@ -48,8 +48,7 @@ def show_page_dashboard():
     with col2:
         st.subheader("Inbound to Stock")
         st.dataframe(inbound_table, hide_index=True)
-        # Add inbound chart
-        st.subheader("Inbound per day in feets")
+        # Inbound chart
         inbound_table['Date'] = pd.to_datetime(inbound_table['Date'])
         inbound_chart_data = inbound_table.groupby(inbound_table['Date'].dt.date)['Total Length'].sum().reset_index()
         fig = px.bar(inbound_chart_data, x='Date', y='Total Length', title='Inbound Feet per Day')

@@ -65,7 +65,7 @@ def generate_invoice(invoice_number, invoice_data):
     pdf.set_font("Arial", style='B', size=16)
     pdf.set_text_color(0, 100, 0)  # Dark green color
     pdf.cell(200, 10, txt="Dangerous Goods Management", ln=True, align="C")
-    pdf.cell(200, 10, txt="Automatic Outbound Invoice", ln=True, align="C")
+    pdf.cell(200, 10, txt="Outbound Invoice", ln=True, align="C")
     pdf.ln(10)
 
     # Add invoice number and date
