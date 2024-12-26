@@ -82,12 +82,14 @@ def show_page_outbound():
                                     
                                     if update_response.data:
                                         # Store data for outbound record
+                                        status = "Pending"
                                         outbound_data.append({
                                             'sku_id': sku_id,
                                             'client_id': client_id,
                                             'Date': current_date,
                                             'Quantity': quantity,
-                                            'Invoice Number': invoice
+                                            'Invoice Number': invoice,
+                                            'Status': status
                                         })
                                         # Store data for invoice
                                         invoice_data.append({
