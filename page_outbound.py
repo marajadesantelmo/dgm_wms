@@ -73,8 +73,6 @@ def show_page_outbound():
                                 else:
                                     # Calculate the new stock quantity
                                     new_quantity = current_quantity - quantity
-
-                                    # Update stock in Supabase
                                     update_response = supabase_client.from_("stock").update({
                                         "Quantity": new_quantity
                                     }).match({
@@ -88,7 +86,8 @@ def show_page_outbound():
                                             'client_id': client_id,
                                             'Date': current_date,
                                             'Quantity': quantity,
-                                            'Invoice Number': invoice
+                                            'Invoice Number': invoice, 
+                                            'Status': 'Pending'
                                         })
 
                                         invoice_data.append({
@@ -107,7 +106,6 @@ def show_page_outbound():
                     if outbound_data:
                         outbound_id = get_next_outbound_id()
                         for record in outbound_data:
-                            record['id'] = int(outbound_id)
                             outbound_response = supabase_client.from_("outbound").insert([record]).execute()
                             if outbound_response.data:
                                 st.success(f"Outbound record for Invoice {invoice} created successfully!")
@@ -123,8 +121,8 @@ def show_page_outbound():
                     # Reload the current stock and outbound tables
                     stock = fetch_table_data('stock')
                     current_stock = current_stock_table(stock, skus)
-                    outbount = fetch_table_data('outbound')
-                    outbound_table = generate_outbound_table(outbount, skus)
+                    outbound = fetch_table_data('outbound')
+                    outbound_table = generate_outbound_table(outbound, skus)
 
         if 'pdf_output' in st.session_state and 'invoice' in st.session_state:
             st.download_button(
