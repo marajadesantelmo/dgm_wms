@@ -1,6 +1,7 @@
 from supabase_connection import fetch_table_data
 from fpdf import FPDF
 from datetime import datetime
+import pandas as pd
 
 def get_next_client_id():
     clients = fetch_table_data('clients')
@@ -40,6 +41,8 @@ def current_stock_table(stock, skus):
     return current_stock
 
 def generate_inbound_table(inbound, skus):
+    if inbound.empty:
+        inbound = pd.DataFrame(columns=['Date', 'Container', 'SKU', 'Length', 'Quantity', 'Total Length'])
     inbound = inbound.merge(skus, on = 'sku_id')
     inbound['Total Length'] = inbound['Quantity'] * inbound['Length']
     inbound = inbound[['Date', 'Container', 'SKU', 'Quantity', 'Total Length']]
@@ -47,6 +50,8 @@ def generate_inbound_table(inbound, skus):
     return inbound
 
 def generate_outbound_table(outbound, skus):
+    if outbound.empty:
+        outbound = pd.DataFrame(columns=['Date', 'Invoice Number', 'SKU', 'Length', 'Quantity', 'Total Length', 'Status'])
     outbound = outbound.merge(skus, on = 'sku_id')
     outbound['Total Length'] = outbound['Quantity'] * outbound['Length']
     outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length', 'Status']]
