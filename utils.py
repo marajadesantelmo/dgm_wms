@@ -42,11 +42,12 @@ def current_stock_table(stock, skus):
 
 def generate_inbound_table(inbound, skus):
     if inbound.empty:
-        inbound = pd.DataFrame(columns=['Date', 'Container', 'SKU', 'Length', 'Quantity', 'Total Length'])
-    inbound = inbound.merge(skus, on = 'sku_id')
-    inbound['Total Length'] = inbound['Quantity'] * inbound['Length']
-    inbound = inbound[['Date', 'Container', 'SKU', 'Quantity', 'Total Length']]
-    inbound = inbound.sort_values(by='Date', ascending=False)
+        inbound = pd.DataFrame(columns=['Date', 'Container', 'SKU', 'Quantity', 'Total Length'])
+    else:
+        inbound = inbound.merge(skus, on = 'sku_id')
+        inbound['Total Length'] = inbound['Quantity'] * inbound['Length']
+        inbound = inbound[['Date', 'Container', 'SKU', 'Quantity', 'Total Length']]
+        inbound = inbound.sort_values(by='Date', ascending=False)
     return inbound
 
 def generate_outbound_table(outbound, skus):
