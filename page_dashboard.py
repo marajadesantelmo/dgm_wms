@@ -62,8 +62,7 @@ def show_page_dashboard():
     with col3:
         st.subheader("Outbound from Stock")
         st.dataframe(outbound_table, hide_index=True)
-        # Add outbound chart
-        st.subheader("Inbound per day in feets")
+        # Outbound chart
         outbound_table['Date'] = pd.to_datetime(outbound_table['Date']).dt.date
         outbound_chart_data = outbound_table.groupby('Date')['Total Length'].sum().reset_index()
         fig = px.bar(outbound_chart_data, x='Date', y='Total Length', title='Outbound Feet per Day')
