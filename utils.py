@@ -53,10 +53,11 @@ def generate_inbound_table(inbound, skus):
 def generate_outbound_table(outbound, skus):
     if outbound.empty:
         outbound = pd.DataFrame(columns=['Date', 'Invoice Number', 'SKU', 'Length', 'Quantity', 'Total Length', 'Status'])
-    outbound = outbound.merge(skus, on = 'sku_id')
-    outbound['Total Length'] = outbound['Quantity'] * outbound['Length']
-    outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length', 'Status']]
-    outbound = outbound.sort_values(by='Date', ascending=False)
+    else:
+        outbound = outbound.merge(skus, on = 'sku_id')
+        outbound['Total Length'] = outbound['Quantity'] * outbound['Length']
+        outbound = outbound[['Date', 'Invoice Number', 'SKU', 'Quantity', 'Total Length', 'Status']]
+        outbound = outbound.sort_values(by='Date', ascending=False)
     return outbound
    
 def generate_invoice(invoice_number, invoice_data):
