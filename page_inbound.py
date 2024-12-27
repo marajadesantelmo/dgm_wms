@@ -52,8 +52,11 @@ def show_page_inbound():
                         #client_id = int(clients.loc[clients['Name'] == client_name, 'client_id'].values[0])
                         client_id = 5
                         # Check if stock already exists for the given SKU and client
-                        existing_stock = stock.loc[(stock['sku_id'] == sku_id) & (stock['client_id'] == client_id)]
-
+                        if not stock.empty:
+                            existing_stock = stock.loc[(stock['sku_id'] == sku_id) & (stock['client_id'] == client_id)]
+                        if stock.empty:
+                            existing_stock = stock
+                            
                         if not existing_stock.empty:
                             # Update existing stock quantity
                             existing_quantity = int(existing_stock['Quantity'].values[0])
