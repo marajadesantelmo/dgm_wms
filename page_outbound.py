@@ -175,6 +175,16 @@ def show_page_outbound():
     st.subheader("Outbound from Stock")
     outbound_table = outbound_table.sort_values(by='Date', ascending=False)
     st.dataframe(outbound_table, hide_index=True)
-
+    st.subheader("Delete outbound record")
+    invoice_to_delete = st.text_input("Invoice Number")
+    if st.button("Delete Outbound"):
+        if invoice_to_delete:
+            delete_response = supabase_client.from_("outbound").delete().match({"Invoice Number": invoice_to_delete}).execute()
+            if delete_response.data:
+                st.success(f"Outbound record for Invoice {invoice_to_delete} has been deleted.")
+                # Reload the outbound table
+                outbount = fetch_table_data('outbound')
+                outbound_table = generate_outbound_table(outbount, skus)
+            else:
+                st.error(f"Failed to delete outbound record for Invoice {invoice_to_delete}.")
     
-    # Invoice validation
