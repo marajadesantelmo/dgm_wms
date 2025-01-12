@@ -191,4 +191,7 @@ def show_page_outbound():
                     outbound_table = generate_outbound_table(outbound, skus)
                 else:
                     st.error(f"Failed to delete outbound record for Invoice {invoice_to_delete}.")
-    
+            # Reload the outbound table
+            outbound = fetch_table_data('outbound')
+            outbound_table = generate_outbound_table(outbound, skus)
+
