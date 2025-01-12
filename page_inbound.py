@@ -89,6 +89,18 @@ def show_page_inbound():
     with col3:
         st.subheader("Inbound to Stock")
         st.dataframe(inbound_table, hide_index=True)
+        st.subheader("Delete Inbound Record")
+        container_to_delete = st.text_input("Container ID to delete")
+        delete_button = st.button("Delete Inbound Record")
+        if delete_button:
+            # Delete inbound record
+            supabase_client.from_("inbound").delete().eq("Container", container_to_delete).execute()
+            st.success(f"Deleted inbound record for container {container_to_delete}")
+            # Reload the inbound table
+            inbound = fetch_table_data('inbound')
+            inbound_table = generate_inbound_table(inbound, skus)
+
+
 
 
 

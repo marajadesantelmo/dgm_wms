@@ -172,19 +172,23 @@ def show_page_outbound():
                         mime="application/pdf")
             else:
                 st.error(f"Failed to validate outbound {outbound_id}.")
-    st.subheader("Outbound from Stock")
-    outbound_table = outbound_table.sort_values(by='Date', ascending=False)
-    st.dataframe(outbound_table, hide_index=True)
-    st.subheader("Delete outbound record")
-    invoice_to_delete = st.text_input("Invoice Number")
-    if st.button("Delete Outbound"):
-        if invoice_to_delete:
-            delete_response = supabase_client.from_("outbound").delete().match({"Invoice Number": invoice_to_delete}).execute()
-            if delete_response.data:
-                st.success(f"Outbound record for Invoice {invoice_to_delete} has been deleted.")
-                # Reload the outbound table
-                outbount = fetch_table_data('outbound')
-                outbound_table = generate_outbound_table(outbount, skus)
-            else:
-                st.error(f"Failed to delete outbound record for Invoice {invoice_to_delete}.")
+
+    colb1, colb2 = st.columns([1, 1])
+    with colb1:
+        st.subheader("Outbound from Stock")
+        outbound_table = outbound_table.sort_values(by='Date', ascending=False)
+        st.dataframe(outbound_table, hide_index=True)
+    with colb2:
+        st.subheader("Delete outbound record")
+        invoice_to_delete = st.text_input("Invoice Number")
+        if st.button("Delete Outbound"):
+            if invoice_to_delete:
+                delete_response = supabase_client.from_("outbound").delete().match({"Invoice Number": invoice_to_delete}).execute()
+                if delete_response.data:
+                    st.success(f"Outbound record for Invoice {invoice_to_delete} has been deleted.")
+                    # Reload the outbound table
+                    outbound = fetch_table_data('outbound')
+                    outbound_table = generate_outbound_table(outbound, skus)
+                else:
+                    st.error(f"Failed to delete outbound record for Invoice {invoice_to_delete}.")
     
