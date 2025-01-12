@@ -26,7 +26,7 @@ def show_page_inbound():
             with col1_inner:
                 # Selectbox for up to 10 SKUs, default value set to None or "" to prevent accidental selection
                 skus_selected = [
-                    st.selectbox(f"{i+1}. SKU", [""] + skus['SKU'].tolist(), key=f"sku_{i}")
+                    st.selectbox(f"{i+1}. SKU", [""] + sorted(skus['SKU'].tolist()), key=f"sku_{i}")
                     for i in range(10)
                 ]
 
